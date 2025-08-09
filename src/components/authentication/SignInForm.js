@@ -82,7 +82,7 @@ const SignInForm = props => {
       }
     >
       <>
-        {/* <HeadLine
+        <HeadLine
           style={{
             width: "100%",
             height: "150px"
@@ -97,7 +97,7 @@ const SignInForm = props => {
             }}
             alt='logo apparta'
           />
-        </HeadLine> */}
+        </HeadLine>
         <Input
           size="small"
           style={{ width: "100%" }}
