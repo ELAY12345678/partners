@@ -1,0 +1,15 @@
+/node_modules
+/build
+./build.zip
+*.zip
+/build.zip
+.env
+
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip

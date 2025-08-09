@@ -1,0 +1,108 @@
+.flat-button-file {
+  /* font-weight: bold !important; */
+  width: 100px !important;
+}
+.flat-button-file {
+  letter-spacing: 0;
+  color: #000000;
+  text-transform: uppercase;
+  opacity: 0.3;
+  font-size: 0.8125rem;
+  /*  margin-bottom: 10px;
+  padding: 8px 0px; */
+}
+.s3Button {
+  background: #f8f8f8 0% 0% no-repeat padding-box !important;
+  color: rgb(130, 130, 130) !important;
+  font-size: 18px !important;
+  /*    */
+  /* margin: 20px 0px; */
+  width: 100px !important;
+  border-radius: 8px;
+}
+.s3Button input {
+  padding-top: 10px;
+  width: 100%;
+}
+.ant-btn.btn-file-upload {
+  background: #f8f8f8 0% 0% no-repeat padding-box !important;
+  border: 0px !important;
+  /* padding: 10px !important; */
+  /* height: 40px !important; */
+  width: 32% !important;
+  /*  margin-top: 8px !important;
+  margin-bottom: 8px !important; */
+}
+.ant-btn.btn-file-upload,
+.ant-btn.btn-file-upload:hover,
+.ant-btn.btn-file-upload:focus {
+  background: transparent;
+  /*  border: 2px solid #00000052 !important; */
+  /* padding: 10px !important;
+  height: 40px !important; */
+  width: 100%;
+  margin-top: 8px !important;
+  padding: 0px !important;
+  /* margin-bottom: 8px !important; */
+  /*  height: 50px !important; */
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+}
+.ant-btn.btn-file-upload:hover,
+.ant-btn.btn-file-upload:focus {
+  color: inherit !important;
+}
+/* Image Preview*/
+.card-type {
+  border: 0px !important;
+  background: transparent !important;
+}
+.ant-upload.ant-upload-select {
+  width: 100% !important;
+  text-align: center !important;
+}
+.card-container {
+  padding-left: 4px;
+  padding-right: 4px;
+  /*  border: 1px solid #cccccc40; */
+  /* padding: 0px 10px; */
+  /*  border-radius: 10px; */
+  /*  margin: 10px 0px !important; */
+  /* background: #f8f8f8; */
+  /*  background: transparent linear-gradient(90deg, #00a650 0%, #00b2e3 100%) 0% 0%
+    no-repeat padding-box; */
+}
+.cover-type {
+  width: 150px !important;
+  position: relative;
+  border: 1px solid #ccc !important;
+  border-radius: 8px !important;
+  padding: 2px !important;
+  height: 150px;
+  box-shadow: 0px 0px 2px 2px #cccccc40;
+  margin: 0px auto !important;
+  text-align: center !important;
+}
+.card-type .ant-card-body {
+  padding: 0px 24px !important;
+}
+.cover-type img {
+  width: 100%;
+  height: auto;
+}
+.file_name {
+  width: 100%;
+  line-height: 14px;
+  padding: 8px 0px;
+  color: inherit;
+  opacity: 0.5;
+  text-align: center;
+}
+.cover-type {
+  border-radius: 50% !important;
+  overflow: hidden;
+}
+.avatar-icon .ant-avatar.avatar-icon.ant-avatar-circle.ant-avatar-icon{
+  text-align: center !important;
+}

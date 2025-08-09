@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1280 275.9" style="enable-background:new 0 0 1280 275.9;" xml:space="preserve">
+<style type="text/css">
+	.st0{opacity:5.000000e-02;}
+	.st1{fill:url(#XMLID_2_);}
+	.st2{fill:#FFFFFF;}
+</style>
+<g id="XMLID_920_" class="st0">
+	<g>
+		
+			<linearGradient id="XMLID_2_" gradientUnits="userSpaceOnUse" x1="623.2092" y1="356.0996" x2="644.659" y2="180.9262" gradientTransform="matrix(1 0 0 -1 0 276)">
+			<stop  offset="0" style="stop-color:#FFFFFF;stop-opacity:0"/>
+			<stop  offset="4.799306e-03" style="stop-color:#FDFDFD;stop-opacity:4.799306e-03"/>
+			<stop  offset="0.1252" style="stop-color:#C2C2C2;stop-opacity:0.1252"/>
+			<stop  offset="0.2486" style="stop-color:#8E8E8E;stop-opacity:0.2486"/>
+			<stop  offset="0.3722" style="stop-color:#636363;stop-opacity:0.3722"/>
+			<stop  offset="0.4961" style="stop-color:#3F3F3F;stop-opacity:0.4961"/>
+			<stop  offset="0.6204" style="stop-color:#232323;stop-opacity:0.6204"/>
+			<stop  offset="0.7453" style="stop-color:#101010;stop-opacity:0.7453"/>
+			<stop  offset="0.8713" style="stop-color:#040404;stop-opacity:0.8713"/>
+			<stop  offset="1" style="stop-color:#000000"/>
+		</linearGradient>
+		<path id="XMLID_9_" class="st1" d="M104.4,20.5c-37-89.4,103-198.4,219.7-160.9c80.1,25.7,137.8,93.3,228,100.2
+			c94.1,7,161.4-60.4,208.8-121.3c47.5-60.9,109.9-129.8,203.8-128.3c74.4,1.5,138.3,50.3,167,104.2
+			c56.2,105.5,0.1,233.2-119.4,293.4C916.2,156.1,791,159.2,680.8,129c-95-26.2-195.4-121.3-301.2-91.6
+			c-84,23.5-174.9,101.6-257.8,10.4C114.1,38.8,108.2,29.5,104.4,20.5z"/>
+	</g>
+</g>
+<path class="st2" d="M936.5,264.2C636.9,247.8,553.9,60.8,384.1,112.5c-80.3,24.4-103.6,79-223.5,99c-66.1,11-122.8,5.1-160.6-1.7
+	v66.1h1280V128.2c-34.5,40.3-76,73.7-124.2,97.5C1088.3,259.1,1017.7,268.7,936.5,264.2z"/>
+</svg>

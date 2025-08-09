@@ -1,0 +1,16 @@
+/* Poppins Normal*/
+@font-face {
+  font-family: "Poppins";
+  font-weight: normal;
+  src: url("./fonts/poppins/Poppins-Light.ttf") format("opentype");
+}
+@font-face {
+  font-family: "Poppins";
+  font-weight: 500;
+  src: url("./fonts/poppins/Poppins-Medium.ttf") format("opentype");
+}
+@font-face {
+  font-family: "Poppins";
+  font-weight: "bold";
+  src: url("./fonts/poppins/Poppins-Medium.ttf") format("opentype");
+}

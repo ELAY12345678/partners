@@ -1,0 +1,30 @@
+/* .ant-advanced-search-form {
+    padding: 10px;
+}
+  
+.ant-advanced-search-form .ant-form-item {
+    display: flex;
+} */
+
+.ant-advanced-search-form .ant-form-item-control-wrapper {
+  flex: 1;
+}
+.ant-advanced-search-form .ant-form-item {
+  margin-bottom: 0px !important;
+}
+.footer-advanced-form {
+  margin: 5px;
+  padding: 0px;
+}
+
+/* div[xtype="fieldset"]{
+  padding: 0px 20px!important;
+}
+.field-set input{
+  margin: 0px 5px!important;
+}
+*/
+.field-set input[flex="0.25"]{
+  width: calc(50% - 10px)!important;
+  margin: 5px!important;
+} 

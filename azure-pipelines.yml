@@ -1,0 +1,63 @@
+# Node.js with React
+# Build a Node.js project that uses React.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '14.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+  displayName: 'npm install'
+    
+- script: |
+    npm run build
+  displayName: 'npm run build'
+  env:
+    NODE_OPTIONS: --max_old_space_size=4096
+
+- task: FtpUpload@2
+  inputs:
+    credentialsOption: 'serviceEndpoint'
+    serverEndpoint: 'FTP Apparta Partners'
+    rootDirectory: 'build'
+    filePatterns: '**'
+    remoteDirectory: '/'
+    clean: false
+    cleanContents: false
+    preservePaths: true
+    trustSSL: true
+
+
+- task: ArchiveFiles@2
+  displayName: 'archive build folder'
+  inputs:
+    rootFolderOrFile: 'build'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: 'build-azure-$(System.JobId).zip'
+    replaceExistingArchive: true
+    verbose: true
+- task: FtpUpload@2
+  displayName: 'FTP build zip'
+  inputs:
+    credentialsOption: 'serviceEndpoint'
+    serverEndpoint: 'FTP Apparta Partners'
+    rootDirectory: '/home/vsts/work/1/s/'
+    filePatterns: '*build-azure-$(System.JobId).zip'
+    remoteDirectory: '/'
+    clean: false
+    cleanContents: false
+    preservePaths: true
+    trustSSL: true
+
+

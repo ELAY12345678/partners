@@ -1,0 +1,22 @@
+<svg id="layout" xmlns="http://www.w3.org/2000/svg" width="25.369" height="25.369" viewBox="0 0 25.369 25.369">
+  <g id="Grupo_965" data-name="Grupo 965" transform="translate(0 0)">
+    <g id="Grupo_964" data-name="Grupo 964">
+      <path id="Trazado_629" data-name="Trazado 629" d="M10.57,0H1.057A1.06,1.06,0,0,0,0,1.057V12.685a1.06,1.06,0,0,0,1.057,1.057H10.57a1.06,1.06,0,0,0,1.057-1.057V1.057A1.06,1.06,0,0,0,10.57,0ZM9.513,11.628h-7.4V2.114h7.4Z" transform="translate(0 0)" fill="#6b24f8"/>
+    </g>
+  </g>
+  <g id="Grupo_967" data-name="Grupo 967" transform="translate(13.741 11.628)">
+    <g id="Grupo_966" data-name="Grupo 966">
+      <path id="Trazado_630" data-name="Trazado 630" d="M232.436,187.735h-9.513a1.06,1.06,0,0,0-1.057,1.057V200.42a1.061,1.061,0,0,0,1.057,1.057h9.513a1.061,1.061,0,0,0,1.057-1.057V188.792A1.06,1.06,0,0,0,232.436,187.735Zm-1.057,11.627h-7.4v-9.513h7.4Z" transform="translate(-221.865 -187.735)" fill="#6b24f8"/>
+    </g>
+  </g>
+  <g id="Grupo_969" data-name="Grupo 969" transform="translate(0 15.856)">
+    <g id="Grupo_968" data-name="Grupo 968">
+      <path id="Trazado_631" data-name="Trazado 631" d="M10.57,256H1.057A1.06,1.06,0,0,0,0,257.057v7.4a1.061,1.061,0,0,0,1.057,1.057H10.57a1.061,1.061,0,0,0,1.057-1.057v-7.4A1.061,1.061,0,0,0,10.57,256Zm-1.057,7.4h-7.4v-5.285h7.4Z" transform="translate(0 -256)" fill="#6b24f8"/>
+    </g>
+  </g>
+  <g id="Grupo_971" data-name="Grupo 971" transform="translate(13.741 0)">
+    <g id="Grupo_970" data-name="Grupo 970">
+      <path id="Trazado_632" data-name="Trazado 632" d="M232.436,0h-9.513a1.06,1.06,0,0,0-1.057,1.057v7.4a1.061,1.061,0,0,0,1.057,1.057h9.513a1.06,1.06,0,0,0,1.057-1.057v-7.4A1.06,1.06,0,0,0,232.436,0Zm-1.057,7.4h-7.4V2.114h7.4Z" transform="translate(-221.865 0)" fill="#6b24f8"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,65 @@
+:root {
+  /* paleta de colores */
+  --blue: #0dacfb;
+  --indigo: #6610f2;
+  --purple: #6B24F8;
+  --pink: #e83e8c;
+  --red: #ff5252;
+  --orange: #fa8c15;
+  --yellow: #faad14;
+  --orange-light: #ffba57;
+  --green: #9ccc65;
+  --teal: #20c997;
+  --cyan: #00acc1;
+  --white: #fff;
+  --tes: #fab937fa;
+
+  --gray: #707f8f;
+  --gray-light: #E5ECEE;
+  --blue-dark: #172533;
+
+  --gray-dark-1: #343a40;
+  --gray-dark: #262626;
+  --primary: #6B24F8;
+  /* --secondary: hsla(0,0%,100%,.75); */
+  --secondary: hsla(0, 0%, 100%, .75);
+  --success: #9ccc65;
+  --info: #00acc1;
+  --warning: #ffba57;
+  --danger: #ff5252;
+  --light: #f8f9fa;
+  --dark: #343a40;
+
+  --text-color-grey: #5e6c84;
+  --text-color-blue-dark: #172b4d;
+
+  --board-color-blue: #0079bf;
+  --board-color-green: #519839;
+  --board-color-purple: #89609e;
+  --board-color-pink: #cd5a91;
+  --board-color-orange-light: #d29034;
+  --board-color-green-light: #4bbf6b;
+  --board-color-blue-light: #00aecc;
+  --board-color-grey-light: #838c91;
+
+  --color1: #0dacfb;
+  --color2: rgba(29, 199, 120, 1);
+  --color3: rgba(132, 188, 156, 1);
+  --color4: rgba(44, 165, 141, 1);
+  --color5: rgba(0, 16, 33, 1);
+
+  /* Colores principales */
+  --color-gray-light: #e5ecee;
+  --color-gray: #9aa9b9;
+  --color-gray-dark: #464646;
+  --color-white: #fff;
+  --color-green-light: #d7fbeb;
+
+  --color-primary: var(--primary);
+  --color-secundary: var(--secondary);
+  --color-yellow: rgba(237, 240, 96, 1);
+  --color-orange: rgba(241, 162, 8, 1);
+  --color-green: rgba(29, 199, 120, 1);
+  --color-blue-ligth-1: var(--color2);
+  --color-blue-dark-1: var(--color5);
+}

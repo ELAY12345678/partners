@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="89.978" height="36.341" viewBox="0 0 89.978 36.341">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#f98f66" stop-opacity="0.365"/>
+      <stop offset="1" stop-color="#f98f66" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g id="Grupo_794" data-name="Grupo 794" transform="translate(-899.086 -213.675)">
+    <g id="Grupo_752" data-name="Grupo 752" transform="translate(899.792 213.8)">
+      <line id="Línea_57" data-name="Línea 57" x2="89.271" transform="translate(0 35.509)" fill="none" stroke="rgba(107,36,248,0.39)" stroke-miterlimit="10" stroke-width="0.25"/>
+      <line id="Línea_58" data-name="Línea 58" x2="89.271" transform="translate(0 29.591)" fill="none" stroke="rgba(107,36,248,0.39)" stroke-miterlimit="10" stroke-width="0.25"/>
+      <line id="Línea_59" data-name="Línea 59" x2="89.271" transform="translate(0 23.673)" fill="none" stroke="rgba(107,36,248,0.39)" stroke-miterlimit="10" stroke-width="0.25"/>
+      <line id="Línea_60" data-name="Línea 60" x2="89.271" transform="translate(0 17.755)" fill="none" stroke="rgba(107,36,248,0.39)" stroke-miterlimit="10" stroke-width="0.25"/>
+      <line id="Línea_61" data-name="Línea 61" x2="89.271" transform="translate(0 11.836)" fill="none" stroke="rgba(107,36,248,0.39)" stroke-miterlimit="10" stroke-width="0.25"/>
+      <line id="Línea_62" data-name="Línea 62" x2="89.271" transform="translate(0 5.918)" fill="none" stroke="rgba(107,36,248,0.39)" stroke-miterlimit="10" stroke-width="0.25"/>
+      <line id="Línea_63" data-name="Línea 63" x2="89.271" transform="translate(0 0)" fill="none" stroke="rgba(107,36,248,0.39)" stroke-miterlimit="10" stroke-width="0.25"/>
+    </g>
+    <path id="Trazado_511" data-name="Trazado 511" d="M274.659,67.969h-.478l12.769-11.9,12.838-5.949,12.805,11.853,12.838-17.757,12.838,11.9L363.93,32.368V67.843" transform="translate(625.133 181.466)" fill="url(#linear-gradient)"/>
+    <path id="Trazado_510" data-name="Trazado 510" d="M274.867,67.843,287.158,56.07,300,50.121,312.8,61.974l12.838-17.757,12.838,11.9,7.65-7.14,17.107-15.966" transform="translate(624.926 181.466)" fill="none" stroke="#f98f66" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1"/>
+  </g>
+</svg>
