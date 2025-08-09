@@ -6,6 +6,12 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "site": "partners-apparta"
+    "site": "partners-apparta",
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
   }
 }
