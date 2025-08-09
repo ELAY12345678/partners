@@ -1,0 +1,18 @@
+{
+  "version": "0.1",
+  "name": "GoOnewWorld",
+  "description": "Notifications gooneworld",
+  "launch_path": "./index.html",
+  "icons": {
+    "128": "./images/logo-color.svg"
+  },
+  "developer": {
+    "name": "Fabian Vargas",
+    "url": "https://github.com/okiloco/AdminGo.git"
+  },
+  "permissions": {
+    "desktop-notification": {
+      "description": "Needed for creating system notifications."
+    }
+  }
+}
