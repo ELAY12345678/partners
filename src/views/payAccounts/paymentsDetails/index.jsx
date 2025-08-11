@@ -2,7 +2,7 @@ import { Col, Divider, Layout, Row, Statistic, Tabs, Breadcrumb, message, Tag } 
 import { Box, TabsStyled } from "../../../components/Styles";
 import { useTotalPaymentsByAccountId } from "../hooks";
 import DonePayments from "./DonePayments";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import IncomePayments from "./IncomePayments";
 import OutputPayments from "./OutputPayments";
 import BankAccounts from "./BankAccounts";
@@ -32,7 +32,9 @@ const STATUS = [
     },
 ];
 
-const PaymentsDetails = ({ location }) => {
+const PaymentsDetails = () => {
+    const location = useLocation();
+ 
     const navigate = useNavigate();
     const {
         pay_account_id,
@@ -40,7 +42,7 @@ const PaymentsDetails = ({ location }) => {
         account_name,
         establishment_id,
         establishment_branch_id
-    } = location.state;
+    } = location?.state;
 
     const serviceReportIncomeExpenses = getService("report-income-expenses");
     const serviceEstablishmentCommissions = getService("establishments-commissions");

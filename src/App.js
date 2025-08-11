@@ -211,7 +211,7 @@ const App = ({
           })
           .catch((err) => {
             message.error(err.message);
-            // navigate("/");
+            navigate("/");
           });
       })
       .catch((err) => {
