@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import _ from "lodash";
 import { Router, createHistory, navigate } from "@reach/router";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Loadeable from "react-loadable";
 import styled from "styled-components";
 import "bootstrap/dist/css/bootstrap.css";
@@ -379,7 +379,7 @@ const App = ({
                 <Routes>
                   <Route  path="/" element={<SignIn />} />
                   <Route  path="/signin" element={<SignIn />} />
-                  <Route  path="*" exact={true} element={<NotFound />} />
+                  <Route  path="*" exact={true} element={ <Navigate to="/signin" replace />   } />
                 </Routes>
               )}
             </ScrollToTop>
