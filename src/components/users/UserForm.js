@@ -11,7 +11,7 @@ import {
   Row
 } from "antd";
 import { ImageField } from "../com";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import qs from "qs";
 
 import { getService } from '../../services';
@@ -70,10 +70,11 @@ export const true_false = [
 
 const exclude_admin_roles = ["admin"];
 
-const UserForm = ({ source, id, ...props }) => {
+const UserForm = ({ source }) => {
+
+  const { id } = useParams(); 
   const navigate = useNavigate();
-  
-  const [role, setRole] = useState();
+   
 
   const handleUploadFinish = (field, url, file, _id) => {
     const service = getService("users");
@@ -100,16 +101,7 @@ const UserForm = ({ source, id, ...props }) => {
       .catch((err) => message.error(err.message));
   };
 
-  useEffect(() => {
-    if (props.location) {
-      let { search } = props.location;
-      let query = qs.parse(search.replace(/\?/, ""));
-      if (query) {
-        let { role } = query;
-        setRole(role);
-      }
-    }
-  }, [props.location]);
+ 
 
   return (
     <Layout.Content style={{ height: '100%', overflow: 'auto', padding: '2rem' }}>
