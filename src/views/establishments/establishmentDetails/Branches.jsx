@@ -1,6 +1,6 @@
 import { Button, DatePicker, Drawer, Form, Input, InputNumber, Select, Tag, Typography, message } from 'antd';
 import locale from "antd/es/date-picker/locale/es_ES";
-import _ from 'lodash';
+import _, { debounce } from 'lodash';
 import moment from 'moment';
 import numeral from 'numeral';
 import { useState } from 'react';
@@ -72,7 +72,7 @@ const columns = ({ invoiceProfiles, cities, zonesTable, placesTable, onEdit, onR
         dataIndex: "invoice_profile_id",
         key: "invoice_profile_id",
         sorter: true,
-        render: (value) => _.find(invoiceProfiles, ({ id }) => id === value)?.legal_name || value
+        render: (value,record) => record?.invoice_profile?.legal_name || value
     },
     {
         title: "Zona",
@@ -175,7 +175,11 @@ const columns = ({ invoiceProfiles, cities, zonesTable, placesTable, onEdit, onR
 const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
 
     const establishmentService = getService('establishments-branchs');
-
+    const invoiceProfilesService =  getService('invoice-profiles');
+    const [establishmentBranchesOptions, setEstablishmentBranchesOptions] = useState([]);
+    const [establishmentBranchesOptionsTable, setEstablishmentBranchesOptionsTable] = useState([]);
+    const [establishmentBranchSelected, setEstablishmentBranchSelected] = useState();
+    console.log('establishmentBranchSelectedestablishmentBranchSelected',establishmentBranchSelected)
     const [form] = Form.useForm();
     const selectedCityId = Form.useWatch('city_id', form);
     const selectedBranchId = Form.useWatch('id', form);
@@ -193,8 +197,24 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
     const [placesTable] = usePlaces({ city_id: undefined });
     const { recurrenciOptions } = useRecurrenciOptions();
 
+    const getProfileSelected = (profile_id) => {
+        invoiceProfilesService.find({
+            query: {
+            id: profile_id,
+            },
+        }).then((response) => {
+            // console.log('responsedata',response?.data)
+            if(response?.data){
+                // setEstablishmentBranchesOptionsTable(response?.data)
+                setEstablishmentBranchesOptions(_.sortBy(response?.data , [({ legal_name }) => legal_name]));
+            }
+        })
+        .catch((err) => message.error(err));
+    };
 
     const onEdit = (record) => {
+        // console.log('recordrecordrecord',record?.invoice_profile_id)
+        getProfileSelected(record?.invoice_profile_id)
         setSelectedEstablishment(
             {
                 ..._.mapValues({
@@ -206,6 +226,26 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
         );
         setDrawerVisible(true);
     };
+
+     
+    
+    const getEstablishmentBranches = (value) => {
+            if (value === '') {
+                setEstablishmentBranchesOptions([])
+                return;
+            }
+            invoiceProfilesService.find({
+                query: {
+                q: value,
+                },
+            }).then((response) => {
+                    console.log('responsedata',response?.data ,_.sortBy(response?.data , [({ legal_name }) => legal_name]))
+                    setEstablishmentBranchesOptions(_.sortBy(response?.data , [({ legal_name }) => legal_name]));
+            })
+            .catch((err) => message.error(err));
+        };
+
+    const debounceGetEstablishmentBranches = debounce(getEstablishmentBranches, 500, { maxWait: 800 });
 
     const onRemove = async ({ id }) => {
         const establishmentService = getService('establishments-branchs');
@@ -275,6 +315,9 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
                     establishment_id,
                     $sort: {
                         id: 1,
+                    },
+                    $client: {
+                        getInvoiceProfile: true,
                     },
                 }}
                 updateSource={updateSource}
@@ -507,10 +550,10 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
                                 )
                             }
                         </Select>
-                        <Select
+                        {/* <Select
                             flex={0.5}
                             name='invoice_profile_id'
-                            label="Perfil de Facturación"
+                            label="Perfil de Facturación222"
                         >
                             {
                                 _.map(invoiceProfiles, ({ id, legal_name }, index) =>
@@ -519,6 +562,35 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
                                         value={id}
                                     >
                                         {legal_name}
+                                    </Select.Option>
+                                )
+                            }
+                        </Select> */}
+                       
+
+                  
+                        <Select
+                            showSearch
+                            name='invoice_profile_id'
+                            label="Perfil de Facturación"
+                            placeholder="Perfil de Facturación"
+                            validations={[{ required: false, message: 'Perfil de Facturación es requerida' }]}
+                            allowClear
+                            onSearch={debounceGetEstablishmentBranches}
+                            value={establishmentBranchSelected}
+                            onClear={() => setEstablishmentBranchSelected()}
+                            onSelect={(value) => {
+                                setEstablishmentBranchSelected(value);
+                            }}
+                            optionFilterProp="children"
+                            style={{ width: '100%' }}
+                            filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())
+                            }
+                        >
+                            {
+                                _.map(establishmentBranchesOptions, ({ id,nit, legal_name }, index) =>
+                                    <Select.Option key={index} value={id}>
+                                       {`${nit} - ${legal_name}`}
                                     </Select.Option>
                                 )
                             }
