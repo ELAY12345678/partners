@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { Breadcrumb, Divider, InputNumber, Layout, Tabs, Tag } from "antd";
 import _ from "lodash";
@@ -82,9 +82,10 @@ const columns = [
     },
 ];
 
-const PayBenefitUsers = ({ location }) => {
+const PayBenefitUsers = () => {
     const navigate = useNavigate();
-    const { pay_benefit_id, benefit_name, isSpecific, city_id } = location.state;
+    const location = useLocation();
+    const { pay_benefit_id, benefit_name, isSpecific, city_id } = location?.state || {};
 
     return (
         <Layout.Content style={{ height: '100%', overflow: 'auto', padding: '2rem' }}>
