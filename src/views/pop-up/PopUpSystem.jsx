@@ -2,7 +2,7 @@ import { Button, Col, DatePicker, Drawer, Form, Input, message, Row, Select, Tab
 import locale from "antd/es/date-picker/locale/es_ES";
 import _, { debounce } from 'lodash';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AiOutlineDelete, AiOutlineEdit, AiOutlinePlus } from 'react-icons/ai';
 import AsyncButton from '../../components/asyncButton';
 import { Grid } from "../../components/com";
@@ -307,6 +307,9 @@ const  PopUpSystem = ({ location }) => {
                 link_url: values?.link_url,
                 status: values?.status,
                 targeting_scope: values?.targeting_scope,
+                title: values?.title,
+                sub_title: values?.sub_title,
+                button_text: values?.button_text,
                  //genera error
                 type: 'system',
                 establishments_ids_included: values?.targeting_scope ==='all' ? null : JSON.stringify(establishmentCampaigns?.data?.map((it)=>it?.establishment_id)),
@@ -329,6 +332,7 @@ const  PopUpSystem = ({ location }) => {
                             end_time: ENDDATETIME,
                             reappear_interval_minutes: values?.reappear_interval_minutes !=='null' ? values?.reappear_interval_minutes : undefined,
                         })),
+                        
             };
 
             if (selectedGroup && selectedGroup?.id) {
@@ -476,6 +480,18 @@ const  PopUpSystem = ({ location }) => {
             'link_url',
             '',
             );
+             form.setFieldValue(
+            'title',
+            '',
+            );
+             form.setFieldValue(
+            'sub_title',
+            '',
+            );
+             form.setFieldValue(
+            'button_text',
+            '',
+            );
         }
         
     }, [selectedGroup?.id])
@@ -590,6 +606,28 @@ const  PopUpSystem = ({ location }) => {
                         />
                         <Input
                             flex={1}
+                            name='title'
+                            label='Título'
+                            validations={[
+                                {
+                                    required: false,
+                                    message: `Título es requerido`
+                                }
+                            ]}
+                        />
+                        <Input
+                            flex={1}
+                            name='sub_title'
+                            label='Subtítulo'
+                            validations={[
+                                {
+                                    required: false,
+                                    message: `Subtítulo es requerido`
+                                }
+                            ]}
+                        />
+                        <Input
+                            flex={1}
                             name='description'
                             label='Descripción'
                             validations={[
@@ -607,6 +645,17 @@ const  PopUpSystem = ({ location }) => {
                                 {
                                     required: true,
                                     message: `Link es requerido`
+                                }
+                            ]}
+                        />
+                        <Input
+                            flex={1}
+                            name='button_text'
+                            label='Texto botón'
+                            validations={[
+                                {
+                                    required: true,
+                                    message: `Texto botón es requerido`
                                 }
                             ]}
                         />
