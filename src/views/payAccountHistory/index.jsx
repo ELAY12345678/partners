@@ -33,7 +33,7 @@ const PaymentsDetails = () => {
     const generateReportIncomeExpenses = async () => {
         await serviceReportIncomeExpenses.find({
             query: {
-                ...establishmentFilters
+                establishment_branch_id: establishmentFilters?.establishment_branch_id
             },
         }).then((response) => {
             window.open(response.path, '_blank');
