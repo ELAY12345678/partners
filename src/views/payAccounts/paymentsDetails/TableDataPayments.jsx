@@ -201,7 +201,7 @@ const TableDataPayments = ({ source, filterDefaultValues, permitFetch, updateSta
                 </Tag>
             }
         },
-        [1,117166,419654].includes(currentUser?.id) && {
+        [1,117166,529149].includes(currentUser?.id) && {
             title: "Estado",
             dataIndex: "status",
             key: "status",
