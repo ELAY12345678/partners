@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import S3Uploader from "react-s3-uploader";
 import { Progress } from "antd";
 import styled from "styled-components";
+import { URL_BASE_API_PROD } from "../../../constants";
 
 const WrapperImage = styled.div`
   margin: 0px auto;
@@ -164,7 +165,7 @@ class FileField extends Component {
                 ""
               )}`
             }
-            server="https://api.apparta.co"
+            server={URL_BASE_API_PROD}
             // inputRef={cmp => this.uploadInput = cmp}
             autoUpload={true}
             className="s3-uploader"

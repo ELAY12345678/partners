@@ -7,6 +7,7 @@ import AsyncButton from "../../components/asyncButton";
 import { Grid } from "../../components/com";
 import { FileUploader } from "../../components/com/form/";
 import { getService } from "../../services";
+import { URL_BASE_API_PROD } from "../../constants";
 
 
 const serviceWithdrawal = getService("pay-withdrawal");
@@ -202,7 +203,7 @@ const PayPending = () => {
                                 type='primary'
                                 size='middle'
                                 style={{ borderRadius: '0.5rem' }}
-                                onClick={() => window.open('https://api.apparta.co/job-create-pay-withdrawals?$client[createTo]=establishmentsBranhs', '_blank')}
+                                onClick={() => window.open(`${URL_BASE_API_PROD}/job-create-pay-withdrawals?$client[createTo]=establishmentsBranhs`, '_blank')}
                             >
                                 Generar pagos pendientes
                             </AsyncButton>

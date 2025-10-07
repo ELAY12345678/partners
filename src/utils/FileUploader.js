@@ -7,8 +7,9 @@ import lodash from 'lodash';
 import {forkJoin, Observable} from 'rxjs';
 // @ts-ignore
 import * as S3Upload from 'react-s3-uploader/s3upload';
+import { URL_BASE_API_PROD } from '../constants';
 
-const URL_S3_SERVER = "https://api.apparta.co/";
+const URL_S3_SERVER = URL_BASE_API_PROD;
 
 
 
