@@ -2,7 +2,15 @@ import feathers from "@feathersjs/client";
 import { URL_BASE_API, URL_AUTHENTICATION } from "../constants";
 import socketio from '@feathersjs/socketio-client';
 import io from 'socket.io-client';
-const socket = io(URL_BASE_API);
+const socket = io(URL_BASE_API, {
+    withCredentials: true,
+    transports: ['websocket'],
+    // reconnection: true,
+    // reconnectionAttempts: 5,
+    // reconnectionDelay: 1000,
+    // reconnectionDelayMax: 5000,
+});
+
 const app = feathers();
 app.configure(socketio(socket, {
     timeout: 60000
