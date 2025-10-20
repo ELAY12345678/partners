@@ -3,7 +3,7 @@ export const API_KEY = process.env.REACT_APP_API_KEY;
 export const API_KEY_GOOGLE_MAPS = process.env.REACT_APP_API_KEY_GOOGLE_MAPS;
 
 /* api */
-export const URL_BASE_API_PROD = "https://apparta-api-927332588055.us-west1.run.app";
+export const URL_BASE_API_PROD = "https://apparta-api-new-927332588055.us-central1.run.app";
 // export const URL_BASE_API_PROD = "https://api.apparta.co";
 /* api staging*/
 export const URL_BASE_API_STG = "https://api-staging.apparta.co";
