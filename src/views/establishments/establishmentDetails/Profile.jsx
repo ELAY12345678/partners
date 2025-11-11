@@ -1,4 +1,4 @@
-import { Badge, Button, Col, Divider, Image, Input, InputNumber, message, Row, Select, Skeleton, Space, Typography } from 'antd';
+import { Badge, Button, Col, Divider, Image, Input, InputNumber, message, Popconfirm, Row, Select, Skeleton, Space, Typography } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import DragAndDropUploader from "../../../components/com/DragAndDropUploader";
@@ -81,6 +81,7 @@ const formatData = (data) => {
 const Profile = ({ establishmentData, setEstablishmentData }) => {
 
     const establishmentService = getService("establishments");
+    const establishmentsBlockedByWallet = getService("establishments-blocked-by-wallet")
     const [amenities, loadingAmenities] = useAmenities();
     const [establishmentWebBanners, setEstablishmentWebBanners] = useState([]);
 
@@ -137,7 +138,49 @@ const Profile = ({ establishmentData, setEstablishmentData }) => {
                     message.error(err.message || 'Upp! intenta nuevamente');
                 });
         }
+    }
 
+    const handleToggleUserBlock = async () => {
+        if (!establishmentData?.id) return;
+        
+        if(establishmentData?.establishmentsBlockedByWallet?.status){
+            const newStatus = establishmentData?.establishmentsBlockedByWallet?.status === 'active' ? 'inactive' : 'active';
+            await establishmentsBlockedByWallet.patch(establishmentData?.establishmentsBlockedByWallet?.id, { status: newStatus,blocked_datetime: newStatus =='active' ? moment.format('YYYY-MM-DD HH:mm:ss') : undefined })
+                .then((response) => {
+                    message.success(
+                        newStatus === 'active' 
+                            ? "Usuario bloqueado exitosamente!" 
+                            : "Usuario desbloqueado exitosamente!"
+                    );
+                    setEstablishmentData({
+                        ...establishmentData,
+                        establishmentsBlockedByWallet: {
+                            ...response
+                        }
+                    });
+                })
+            .catch(err => {
+                message.error(err.message || 'Error al cambiar el estado del usuario');
+            });
+        } else{
+            await establishmentsBlockedByWallet.create({
+                    "establishment_id": establishmentData?.id,
+                    "blocked_datetime": moment.format('YYYY-MM-DD HH:mm:ss')
+                })
+                .then((response) => {
+                    message.success("Usuario bloqueado exitosamente!");
+                    setEstablishmentData({
+                        ...establishmentData,
+                        establishmentsBlockedByWallet: {
+                            ...response
+                        }
+                    });
+                })
+            .catch(err => {
+                message.error(err.message || 'Error al cambiar el estado del usuario');
+            });
+        }
+        
     }
 
     useEffect(() => {
@@ -582,7 +625,25 @@ const Profile = ({ establishmentData, setEstablishmentData }) => {
                             label="Descripción LinkTree"
                             size='large'
                         />
-
+                        <div flex={0.5} style={{ marginTop: '1rem' ,borderRadius:'10px'}}>
+                            <Popconfirm
+                                title={establishmentData?.establishmentsBlockedByWallet?.status === 'active' ? '¿Está seguro de desbloquear los usuarios de este establecimiento?' : '¿Está seguro de bloquear los usuarios de este establecimiento?'}
+                                // placement={'¿Está seguro de bloquear los usuarios de este establecimiento?'}
+                                okText="Si"
+                                cancelText="No"
+                                // disabled={rest.disabled}
+                                onConfirm={async () => await handleToggleUserBlock()}
+                            >
+                                <Button
+                                    type={establishmentData?.establishmentsBlockedByWallet?.status === 'active' ?   'primary' : '#D32F2F'}
+                                    danger={establishmentData?.establishmentsBlockedByWallet?.status === 'inactive'}
+                                    size='large'
+                                    // onClick={handleToggleUserBlock}
+                                >
+                                    {establishmentData?.establishmentsBlockedByWallet?.status === 'active' ?   'Desbloquear usuarios' : 'Bloquear usuarios'}
+                                </Button>
+                            </Popconfirm>
+                        </div>
                         {
                             establishmentData?.mozrest_company_integration_response ? (
                                 <div flex={1}>

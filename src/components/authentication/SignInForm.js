@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Input, Button, Icon, Row, Col, message, Form as FormAnt } from "antd";
+import { Button, Col, Form as FormAnt, Icon, Input, message } from "antd";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { socket } from "../../api/";
 
@@ -10,7 +10,7 @@ import * as actionTypes from "../../redux/app/actions";
 /* Services */
 import { authenticate } from "../../services/services";
 
-import { Form, HeadLine, Footer } from './Styled';
+import { Footer, Form, HeadLine } from './Styled';
 
 import LogoApparta from "../../sources/images/Logo_Apparta-01.png";
 
@@ -48,7 +48,10 @@ const SignInForm = props => {
           navigate("/dashboard");
         if (props.onSubmit) props.onSubmit(err, data);
       })
-      .catch(err => message.error("Email or Password Invalid!"));
+      .catch(err => {
+        console.log('errerr',err?.code,err?.message)
+        err?.code ===403  ? message.error(err?.message) : message.error("Email or Password Invalid!")
+      });
   };
 
   return (
