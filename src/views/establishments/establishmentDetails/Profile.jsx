@@ -1,5 +1,6 @@
 import { Badge, Button, Col, Divider, Image, Input, InputNumber, message, Popconfirm, Row, Select, Skeleton, Space, Typography } from 'antd';
 import _ from 'lodash';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import DragAndDropUploader from "../../../components/com/DragAndDropUploader";
 import { ColorField } from '../../../components/com/fields';
@@ -9,7 +10,6 @@ import { Box } from '../../../components/Styles';
 import { S3_PATH_IMAGE_HANDLER, URL_S3 } from '../../../constants';
 import { getService } from '../../../services';
 import { useAmenities } from '../hooks';
-
 
 const STATUS = [
     {
@@ -145,7 +145,7 @@ const Profile = ({ establishmentData, setEstablishmentData }) => {
         
         if(establishmentData?.establishmentsBlockedByWallet?.status){
             const newStatus = establishmentData?.establishmentsBlockedByWallet?.status === 'active' ? 'inactive' : 'active';
-            await establishmentsBlockedByWallet.patch(establishmentData?.establishmentsBlockedByWallet?.id, { status: newStatus,blocked_datetime: newStatus =='active' ? moment.format('YYYY-MM-DD HH:mm:ss') : undefined })
+            await establishmentsBlockedByWallet.patch(establishmentData?.establishmentsBlockedByWallet?.id, { status: newStatus,blocked_datetime: newStatus =='active' ? moment().format('YYYY-MM-DD HH:mm:ss') : undefined })
                 .then((response) => {
                     message.success(
                         newStatus === 'active' 
@@ -162,10 +162,10 @@ const Profile = ({ establishmentData, setEstablishmentData }) => {
             .catch(err => {
                 message.error(err.message || 'Error al cambiar el estado del usuario');
             });
-        } else{
+        } else {
             await establishmentsBlockedByWallet.create({
                     "establishment_id": establishmentData?.id,
-                    "blocked_datetime": moment.format('YYYY-MM-DD HH:mm:ss')
+                    "blocked_datetime": moment().format('YYYY-MM-DD HH:mm:ss')
                 })
                 .then((response) => {
                     message.success("Usuario bloqueado exitosamente!");
@@ -632,7 +632,7 @@ const Profile = ({ establishmentData, setEstablishmentData }) => {
                                 okText="Si"
                                 cancelText="No"
                                 // disabled={rest.disabled}
-                                onConfirm={async () => await handleToggleUserBlock()}
+                                onConfirm={ async () => await handleToggleUserBlock()}
                             >
                                 <Button
                                     type={establishmentData?.establishmentsBlockedByWallet?.status === 'active' ?   'primary' : '#D32F2F'}
