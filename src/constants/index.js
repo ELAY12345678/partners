@@ -8,7 +8,7 @@ export const URL_BASE_API_PROD = "https://apparta-api-new-927332588055.us-centra
 /* api staging*/
 export const URL_BASE_API_STG = "https://api-staging.apparta.co";
 /* api local*/
-export const URL_BASE_API_LOCAL = "http://192.168.88.92:3030";
+export const URL_BASE_API_LOCAL = "https://cj6z0tvp-8080.use2.devtunnels.ms";
 
 export const URL_BASE_API = window.location.hostname === "localhost" ? URL_BASE_API_PROD : URL_BASE_API_PROD;
 export const URL_BASE = URL_BASE_API;

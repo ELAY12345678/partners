@@ -7,7 +7,7 @@ import {
   Modal,
   Row,
   Table,
-  Tooltip
+  Tooltip,
 } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { RoundedButton, SearchBox, Wrapper } from "./Styles";
@@ -20,7 +20,13 @@ import { getService } from "../../../services/";
 import { MyModal } from "../MyModal";
 import Box from "../box/Box";
 
-import { AiOutlineClose, AiOutlineEdit, AiOutlinePlus, AiOutlineReload } from 'react-icons/ai';
+import {
+  AiOutlineClose,
+  AiOutlineEdit,
+  AiOutlinePlus,
+  AiOutlineReload,
+} from "react-icons/ai";
+import AsyncButton from "../../asyncButton";
 
 const { confirm } = Modal;
 const { RangePicker } = DatePicker;
@@ -29,74 +35,76 @@ const defaultState = {
   actions: {
     edit: true,
     create: true,
-    delete: true
+    delete: true,
   },
   pagination: {
     showSizeChanger: true,
     defaultCurrent: 0,
     current: 1,
-    showTotal: total => {
+    showTotal: (total) => {
       return `Total ${total} record${total > 1 ? "s" : ""}`;
     },
     defaultPageSize: 50,
-    pageSizeOptions: ["10", "20", "30", "40", "50"]
-  }
+    pageSizeOptions: ["10", "20", "30", "40", "50"],
+  },
 };
 
-const Grid = (
-  {
-    source,
-    mode = "default",
-    report = {},
-    initialValues = {},
-    custom = false,
-    edit,
-    create,
-    actions = defaultState.actions,
-    columns,
-    searchText,
-    search = false,
-    searchById = false,
-    refresh = true,
-    extra,
-    autoScrollX = false,
-    exportCsv = false,
-    importCsv = false,
-    model,
-    path,
-    searchField = "search",
-    buttomAddText = "Agregar",
-    title,
-    permitFetch = true,
-    style,
-    returnToParentData,
-    updateSource,
-    paginationActive = true,
-    scroll = false,
-    transparent,
-    selection = false,
-    getCheckboxProps,
-    onChangeSelection,
-    maxSelection,
-    expandable,
-    limit = 50,
-    withUniq=false,
-    ...props
-  }
-) => {
+const Grid = ({
+  exportButton = false,
+  onClickExport = () => {},
+  source,
+  mode = "default",
+  report = {},
+  initialValues = {},
+  custom = false,
+  edit,
+  create,
+  actions = defaultState.actions,
+  columns,
+  searchText,
+  search = false,
+  searchById = false,
+  refresh = true,
+  extra,
+  autoScrollX = false,
+  exportCsv = false,
+  importCsv = false,
+  model,
+  path,
+  searchField = "search",
+  buttomAddText = "Agregar",
+  title,
+  permitFetch = true,
+  style,
+  returnToParentData,
+  updateSource,
+  paginationActive = true,
+  scroll = false,
+  transparent,
+  selection = false,
+  getCheckboxProps,
+  onChangeSelection,
+  maxSelection,
+  expandable,
+  limit = 50,
+  withUniq = false,
+  ...props
+}) => {
   const navigate = useNavigate();
   const idComponent = uuid();
   const myRef = useRef();
   const [LIMIT, setLIMIT] = useState(limit);
   const [pagination, setPagination] = useState({
     ...defaultState.pagination,
-    defaultPageSize:LIMIT,
+    defaultPageSize: LIMIT,
     onShowSizeChange: (current = "invalid value", size) => {
       setLIMIT(size);
     },
   });
   const [filters, setFilters] = useState();
-  const [filterDefaultValues, setFilterDefaultValues] = useState({ ...props.filterDefaultValue });
+  const [filterDefaultValues, setFilterDefaultValues] = useState({
+    ...props.filterDefaultValue,
+  });
   const [dataSource, setDataSource] = useState(props.dataSource || []);
   const [sorter, setSorter] = useState();
   const [loading, setLoading] = useState(props.loading || false);
@@ -108,10 +116,14 @@ const Grid = (
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   const onSelectChange = (newSelectedRowKeys, newSelectedRecords) => {
-    const tempSelecteds = maxSelection ? newSelectedRowKeys.slice(0,maxSelection) : newSelectedRowKeys;
-    const tempSelectedRecords = maxSelection ? newSelectedRecords.slice(0,maxSelection) : newSelectedRecords;
+    const tempSelecteds = maxSelection
+      ? newSelectedRowKeys.slice(0, maxSelection)
+      : newSelectedRowKeys;
+    const tempSelectedRecords = maxSelection
+      ? newSelectedRecords.slice(0, maxSelection)
+      : newSelectedRecords;
     setSelectedRowKeys(tempSelecteds);
-    if(onChangeSelection){
+    if (onChangeSelection) {
       onChangeSelection(tempSelecteds, tempSelectedRecords);
     }
   };
@@ -127,13 +139,13 @@ const Grid = (
     gridCol: {
       xl: { span: 24 },
       sm: { span: 24 },
-      xs: { span: 24 }
+      xs: { span: 24 },
     },
     formCol: {
       xl: { span: 24 },
       sm: { span: 24 },
-      xs: { span: 24 }
-    }
+      xs: { span: 24 },
+    },
   };
 
   const handleDelete = (id, record) => {
@@ -148,13 +160,13 @@ const Grid = (
           const service = getService(source);
           service
             .remove(id)
-            .then(response => {
+            .then((response) => {
               getData();
               message.info("Record eliminado");
             })
-            .catch(err => message.error(err.message));
+            .catch((err) => message.error(err.message));
         },
-        onCancel() { }
+        onCancel() {},
       });
     }
   };
@@ -174,11 +186,11 @@ const Grid = (
   const handleSearch = (value, field) => {
     setFilters({
       ...filters,
-      [field ? field : searchField]: value ? value : undefined
+      [field ? field : searchField]: value ? value : undefined,
     });
     setPagination({
       ...pagination,
-      current: 1
+      current: 1,
     });
   };
 
@@ -189,18 +201,22 @@ const Grid = (
     setFilters({ ...filters, ...new_filters });
     if (sorter.field)
       setSorter({
-        [sorter.field]: sorter.order === "ascend" ? 1 : -1
+        [sorter.field]: sorter.order === "ascend" ? 1 : -1,
       });
   };
 
   const onChange = (field, value) => {
     setFilters({
       ...filters,
-      [field]: !value ? filterDefaultValues?.[field] ? filterDefaultValues?.[field] : undefined : value
+      [field]: !value
+        ? filterDefaultValues?.[field]
+          ? filterDefaultValues?.[field]
+          : undefined
+        : value,
     });
   };
 
-  const getData = params => {
+  const getData = (params) => {
     if (props.dataSource) {
       return setLoading(false);
     }
@@ -211,8 +227,8 @@ const Grid = (
           $sort: sorter || filterDefaultValues.$sort,
           ...filterDefaultValues,
           ...filters,
-          $skip: 0
-        }
+          $skip: 0,
+        },
       };
     }
     if (source && permitFetch && !_.isEmpty(filterDefaultValues)) {
@@ -227,40 +243,47 @@ const Grid = (
           let pager = { ...pagination };
           pager.total = meta ? meta.TotalRecords : total;
           setPagination(pager);
-          if(withUniq){
+          if (withUniq) {
             // Ordenar por createdAt (ascendente, para obtener el primero creado)
-            const sortedData = _.orderBy(data, ['nit', 'createdAt'], ['asc', 'desc']);
+            const sortedData = _.orderBy(
+              data,
+              ["nit", "createdAt"],
+              ["asc", "desc"]
+            );
             // Filtrar datos únicos por `nit`, conservando el primero creado
-            const uniqueData = _.orderBy(_.uniqBy(sortedData, 'nit'),['id'], ['asc'])
+            const uniqueData = _.orderBy(
+              _.uniqBy(sortedData, "nit"),
+              ["id"],
+              ["asc"]
+            );
             setDataSource(uniqueData);
-          }else{
+          } else {
             setDataSource(data);
           }
-          
-          if (returnToParentData)
-            returnToParentData(data);
+
+          if (returnToParentData) returnToParentData(data);
         })
-        .catch(err => {
-          console.log('es aqui',err);
+        .catch((err) => {
+          console.log("es aqui", err);
           message.error(err.message);
           setLoading(false);
         });
     } else {
-      setDataSource([])
+      setDataSource([]);
     }
   };
 
-  const handleEdit = id => {
+  const handleEdit = (id) => {
     if (source) {
       const service = getService(source);
       if (service && id)
         service
           .remove(id)
-          .then(response => {
+          .then((response) => {
             setLoading(false);
             getData();
           })
-          .catch(err => {
+          .catch((err) => {
             message.error(err.message);
             setLoading(false);
           });
@@ -281,7 +304,7 @@ const Grid = (
                 onChange={(_dataMoment, dataString) =>
                   setRangeDateExport({
                     initial_date: dataString[0],
-                    final_date: dataString[1]
+                    final_date: dataString[1],
                   })
                 }
               />
@@ -305,10 +328,10 @@ const Grid = (
     },
     okButtonProps: { disibled: true },
     cancelButtonProps: { disibled: true },
-    onOk: () => { },
+    onOk: () => {},
     onCancel: () => {
       setIsVisisibleModalExport(false);
-    }
+    },
   };
 
   function handleExport() {
@@ -317,10 +340,10 @@ const Grid = (
       .find({
         query: {
           restaurant_id: filterDefaultValues.restaurant_id,
-          ...rangeDateExport
-        }
+          ...rangeDateExport,
+        },
       })
-      .then(data => {
+      .then((data) => {
         let { location } = data;
         const link = document.createElement("a");
         link.href = location;
@@ -335,7 +358,7 @@ const Grid = (
         setIsVisisibleModalExport(false);
         setRangeDateExport({});
       })
-      .catch(e => {
+      .catch((e) => {
         message.error(e.message);
       });
   }
@@ -344,7 +367,6 @@ const Grid = (
     if (!err && !record) setRecord(data);
     getData();
   };
-
 
   useEffect(() => {
     if (props.dataSource) {
@@ -363,8 +385,8 @@ const Grid = (
           $sort: sorter || filterDefaultValues.$sort,
           $skip: custom
             ? pagination.current || pagination.defaultCurrent || 0
-            : undefined
-        }
+            : undefined,
+        },
       });
     }
   }, [filters, sorter]);
@@ -374,10 +396,13 @@ const Grid = (
       !_.isEmpty(props.filterDefaultValues) &&
       !_.isEqual(props.filterDefaultValues, filterDefaultValues)
     ) {
-      setFilterDefaultValues({ ...filterDefaultValues, ...props.filterDefaultValues });
+      setFilterDefaultValues({
+        ...filterDefaultValues,
+        ...props.filterDefaultValues,
+      });
     }
     if (_.isEmpty(props.filterDefaultValues)) {
-      setFilterDefaultValues({})
+      setFilterDefaultValues({});
     }
   }, [props.filterDefaultValues]);
 
@@ -391,124 +416,102 @@ const Grid = (
           $sort: sorter || filterDefaultValues.$sort,
           $skip: custom
             ? pagination.current || pagination.defaultCurrent || 1
-            : undefined
-        }
+            : undefined,
+        },
       });
     } else {
       setDataSource([]);
     }
   }, [filterDefaultValues, updateSource]);
 
-
-
   const gridColumns = [
     ...columns
-      .map(item => ({
+      .map((item) => ({
         ...item,
         align: "left",
-        display:
-          typeof item.display !== "undefined" ? item.display : true
+        display: typeof item.display !== "undefined" ? item.display : true,
       }))
-      .filter(item => item.display),
+      .filter((item) => item.display),
   ];
 
   if (!_.isEmpty(actions)) {
-    gridColumns.push(
-      {
-        type: "actions",
-        width: !actions.extra ? 100 : 150,
-        title: "Acciones",
-        /* align: "center", */
-        fixed: props.fixed
-          ? typeof props.fixed === "boolean"
-            ? props.fixed
-              ? "right"
-              : false
-            : props.fixed
-          : "right",
-        render: record => {
-          return (
-            <Row
-              type="flex"
-              justify="center"
-              align="middle"
-              gutter={0}
-            >
-              {edit && actions.edit && (
-                <Col>
-                  <Tooltip
-                    className="btn-inline"
-                    placement="bottom"
-                    title="Edit"
-                  >
-                    <Button
-                      type="link"
-                      icon={<AiOutlineEdit />}
-                      onClick={() => {
-                        setRecord(record);
-                        setVisible(true);
-                        if (props.onChange) props.onChange(record);
-                        if (mode === "default") {
-                          let query = props.location.search;
+    gridColumns.push({
+      type: "actions",
+      width: !actions.extra ? 100 : 150,
+      title: "Acciones",
+      /* align: "center", */
+      fixed: props.fixed
+        ? typeof props.fixed === "boolean"
+          ? props.fixed
+            ? "right"
+            : false
+          : props.fixed
+        : "right",
+      render: (record) => {
+        return (
+          <Row type="flex" justify="center" align="middle" gutter={0}>
+            {edit && actions.edit && (
+              <Col>
+                <Tooltip className="btn-inline" placement="bottom" title="Edit">
+                  <Button
+                    type="link"
+                    icon={<AiOutlineEdit />}
+                    onClick={() => {
+                      setRecord(record);
+                      setVisible(true);
+                      if (props.onChange) props.onChange(record);
+                      if (mode === "default") {
+                        let query = props.location.search;
 
-                          navigate(
-                            `/${props.basePath ||
-                            "dashboard"}${path || "/" + source}/${record.id
-                            }${query ? query : ""}`
-                          );
-                        }
-                      }}
-                    />
-                  </Tooltip>
-                </Col>
-              )}
-              {actions.delete && (
-                <Col>
-                  <Tooltip
-                    className="btn-inline"
-                    placement="bottom"
-                    title="Delete"
-                  >
-                    <Button
-                      onClick={() => handleDelete(record.id, record)}
-                      type="link"
-                    >
-                      <Icon
-                        type="delete"
-                        theme="twoTone"
-                        twoToneColor="#eb2f96"
-                      />
-                    </Button>
-                  </Tooltip>
-                </Col>
-              )}
-              {actions.show && (
-                <Col>
-                  <Tooltip
-                    className="btn-inline"
-                    placement="bottom"
-                    title="Show"
-                  >
-                    <Button
-                      onClick={() => {
-                        return navigate(
+                        navigate(
                           `/${props.basePath || "dashboard"}${path ||
-                          "/" + source}/${record.id}`
+                            "/" + source}/${record.id}${query ? query : ""}`
                         );
-                      }}
-                      type="link"
-                    >
-                      <Icon
-                        type="eye"
-                        theme="twoTone"
-                        twoToneColor="#6610f2"
-                      />
-                    </Button>
-                  </Tooltip>
-                </Col>
-              )}
-              {actions.extra && Array.isArray(actions.extra)
-                ? actions.extra.map((item, index) => {
+                      }
+                    }}
+                  />
+                </Tooltip>
+              </Col>
+            )}
+            {actions.delete && (
+              <Col>
+                <Tooltip
+                  className="btn-inline"
+                  placement="bottom"
+                  title="Delete"
+                >
+                  <Button
+                    onClick={() => handleDelete(record.id, record)}
+                    type="link"
+                  >
+                    <Icon
+                      type="delete"
+                      theme="twoTone"
+                      twoToneColor="#eb2f96"
+                    />
+                  </Button>
+                </Tooltip>
+              </Col>
+            )}
+            {actions.show && (
+              <Col>
+                <Tooltip className="btn-inline" placement="bottom" title="Show">
+                  <Button
+                    onClick={() => {
+                      return navigate(
+                        `/${props.basePath || "dashboard"}${path ||
+                          "/" + source}/${record.id}`
+                      );
+                    }}
+                    type="link"
+                  >
+                    <Icon type="eye" theme="twoTone" twoToneColor="#6610f2" />
+                  </Button>
+                </Tooltip>
+              </Col>
+            )}
+            {actions.extra && Array.isArray(actions.extra)
+              ? actions.extra.map((item, index) => {
                   return (
                     <Col key={index}>
                       <Button
@@ -523,7 +526,7 @@ const Grid = (
                     </Col>
                   );
                 })
-                : actions.extra &&
+              : actions.extra &&
                 actions.extra.props &&
                 React.Children.map(
                   actions.extra.props.children,
@@ -536,45 +539,48 @@ const Grid = (
                             if (child.props.onClick) {
                               child.props.onClick(record);
                             }
-                          }
+                          },
                         })}
                       </Col>
                     );
                   }
                 )}
-            </Row>
-          );
-        }
-      }
-    )
+          </Row>
+        );
+      },
+    });
   }
 
   return (
-    <Wrapper >
+    <Wrapper>
       <Row gutter={4}>
         {visible && mode === "inner" && (
           <Col id={idComponent} {...itemLayout.formCol}>
             <div ref={myRef}>
               {record && record.id && edit
                 ? React.cloneElement(edit, {
-                  id: record.id,
-                  initialValues,
-                  redirect: false,
-                  record,
-                  onSubmit: handleOnSubmit
-                })
+                    id: record.id,
+                    initialValues,
+                    redirect: false,
+                    record,
+                    onSubmit: handleOnSubmit,
+                  })
                 : React.cloneElement(create, {
-                  redirect: false,
-                  initialValues,
-                  onSubmit: handleOnSubmit
-                })}
+                    redirect: false,
+                    initialValues,
+                    onSubmit: handleOnSubmit,
+                  })}
             </div>
           </Col>
         )}
         <Col {...itemLayout.gridCol}>
-          <Box show title={props.listTitle || props.title || undefined} transparent={transparent}>
-            <Row align={'top'} justify={'space-between'} wrap={false}>
-              <Col flex={'auto'}>
+          <Box
+            show
+            title={props.listTitle || props.title || undefined}
+            transparent={transparent}
+          >
+            <Row align={"top"} justify={"space-between"} wrap={false}>
+              <Col flex={"auto"}>
                 <Row
                   style={{
                     margin: 10,
@@ -591,11 +597,11 @@ const Grid = (
                           <SearchBox
                             allowClear={true}
                             placeholder={"Id"}
-                            name='id'
-                            onSearch={value => handleSearch(value, 'id')}
-                            onChange={e => {
+                            name="id"
+                            onSearch={(value) => handleSearch(value, "id")}
+                            onChange={(e) => {
                               let { value } = e.target;
-                              if (!value) handleSearch(value, 'id');
+                              if (!value) handleSearch(value, "id");
                             }}
                           />
                         </Col>
@@ -605,8 +611,8 @@ const Grid = (
                           <SearchBox
                             allowClear={true}
                             placeholder={searchText || "Search..."}
-                            onSearch={value => handleSearch(value)}
-                            onChange={e => {
+                            onSearch={(value) => handleSearch(value)}
+                            onChange={(e) => {
                               let { value } = e.target;
                               if (!value) handleSearch(value);
                             }}
@@ -624,20 +630,25 @@ const Grid = (
                               <Col key={index}>
                                 {React.cloneElement(it, {
                                   onChange: (e, value) => {
-                                    value = e && e.target ? e.target.value : value;
-                                    onChange(name || "field-" + index, value ? value === '' ? undefined : value : e);
-                                  }
+                                    value =
+                                      e && e.target ? e.target.value : value;
+                                    onChange(
+                                      name || "field-" + index,
+                                      value
+                                        ? value === ""
+                                          ? undefined
+                                          : value
+                                        : e
+                                    );
+                                  },
                                 })}
                               </Col>
                             );
                           }
                         )}
-                      
                     </Row>
                   </Col>
-                  <Col>
-                    {extra}
-                  </Col>
+                  <Col>{extra}</Col>
                 </Row>
               </Col>
               <Col>
@@ -653,7 +664,7 @@ const Grid = (
                         style={{
                           margin: "0px 10px",
                           background: "#1dbf73",
-                          border: "1px solid #1dbf73"
+                          border: "1px solid #1dbf73",
                         }}
                         icon="file-excel"
                         type="primary"
@@ -664,6 +675,17 @@ const Grid = (
                         Exportar excel
                       </RoundedButton>
                     </Tooltip>
+                  )}
+                  {exportButton && (
+                    <AsyncButton
+                      style={{ borderRadius: "0.5rem" }}
+                      type="primary"
+                      onClick={async () =>
+                        onClickExport({ ...filterDefaultValues, ...filters })
+                      }
+                    >
+                      Exportar excel
+                    </AsyncButton>
                   )}
                   {importCsv && model && (
                     <Tooltip
@@ -681,26 +703,28 @@ const Grid = (
                   {typeof actions == "boolean"
                     ? actions
                     : create &&
-                    actions.create && (
-                      <RoundedButton
-                        icon={!visible ? <AiOutlinePlus /> : <AiOutlineClose />}
-                        type={!visible ? "primary" : "danger"}
-                        onClick={() => {
-                          setRecord(null);
-                          setVisible(visible => !visible);
-                          /* window.scrollTo(0, myRef.current ? myRef.current.offsetTop : 0) */
-                          /* window.location.hash = idComponent; */
-                          let query = props.location.search;
-                          if (mode === "default")
-                            navigate(
-                              `/${props.basePath || "dashboard"}${path ||
-                              "/" + source}/create${query ? query : ""}`
-                            );
-                        }}
-                      >
-                        {buttomAddText}
-                      </RoundedButton>
-                    )}
+                      actions.create && (
+                        <RoundedButton
+                          icon={
+                            !visible ? <AiOutlinePlus /> : <AiOutlineClose />
+                          }
+                          type={!visible ? "primary" : "danger"}
+                          onClick={() => {
+                            setRecord(null);
+                            setVisible((visible) => !visible);
+                            /* window.scrollTo(0, myRef.current ? myRef.current.offsetTop : 0) */
+                            /* window.location.hash = idComponent; */
+                            let query = props.location.search;
+                            if (mode === "default")
+                              navigate(
+                                `/${props.basePath || "dashboard"}${path ||
+                                  "/" + source}/create${query ? query : ""}`
+                              );
+                          }}
+                        >
+                          {buttomAddText}
+                        </RoundedButton>
+                      )}
                   {refresh && (
                     <Tooltip
                       className="btn-inline"
@@ -725,42 +749,43 @@ const Grid = (
                 marginBottom: 8,
                 marginTop: 8,
               }}
-              justify='end'
+              justify="end"
             >
-              {
-                selectedRowKeys.length ? (
-                  <Col>
-                    <span
-                      style={{
-                        marginLeft: 8,
-                      }}
-                    >
-                      {selectedRowKeys.length} registros seleccionados
-                    </span>
-                  </Col>
-                ) : null
-              }
+              {selectedRowKeys.length ? (
+                <Col>
+                  <span
+                    style={{
+                      marginLeft: 8,
+                    }}
+                  >
+                    {selectedRowKeys.length} registros seleccionados
+                  </span>
+                </Col>
+              ) : null}
             </Row>
             {/* \\\\ */}
             <Table
-              rowSelection={ selection && rowSelection}
+              rowSelection={selection && rowSelection}
               size="small"
               onChange={handleOnChange}
               pagination={paginationActive ? pagination : false}
               rowKey="id"
               loading={loading}
               showHeader={props.showHeader}
-              columns={
-                gridColumns.filter(it => {
-                  if (it.type === "actions" && typeof actions === "boolean") {
-                    return actions;
-                  }
-                  return typeof it != "undefined";
-                })}
-              scroll={scroll ? scroll : {
-                y: 600,
-                x: 800
-              }}
+              columns={gridColumns.filter((it) => {
+                if (it.type === "actions" && typeof actions === "boolean") {
+                  return actions;
+                }
+                return typeof it != "undefined";
+              })}
+              scroll={
+                scroll
+                  ? scroll
+                  : {
+                      y: 600,
+                      x: 800,
+                    }
+              }
               dataSource={dataSource}
               expandable={expandable}
             />
@@ -776,8 +801,8 @@ const Grid = (
         >
           {props.id !== "create" && edit
             ? React.cloneElement(edit, {
-              id: props.id
-            })
+                id: props.id,
+              })
             : create}
         </MyModal>
       }
