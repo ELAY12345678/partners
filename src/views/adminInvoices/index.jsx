@@ -1254,9 +1254,9 @@ const AdminInvoices = () => {
                                         ]}
                                     >
                                         {
-                                            _.map(creditCardsOptions, ({ id, masked_number }, index) =>
+                                            _.map(creditCardsOptions, ({ id, masked_number,...rest }, index) =>
                                                 <Select.Option key={index} value={id}>
-                                                    **** **** **** {(masked_number || '')?.replace(/\*/g, '')}
+                                                    **** **** **** {(masked_number || '')?.replace(/\*/g, '')} {rest?.default === 'true' ? ' (Por defecto)' : ''}
                                                 </Select.Option>
                                             )
                                         }
