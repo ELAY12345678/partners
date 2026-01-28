@@ -97,7 +97,7 @@ export function uploadFile(file, options = DEFAULT_UPLOAD_OPTIONS) {
   return new Observable((subscriber) => {
     new S3Upload({
       fileElement: {files: [file]},
-      signingUrl: 's3Client/sign',
+      signingUrl: '/s3Client/sign',
       preprocess: validateFile(_options.validate),
       onProgress: _options.onProgress,
       onFinishS3Put: (fileS3) => {
@@ -116,7 +116,7 @@ export function uploadFile(file, options = DEFAULT_UPLOAD_OPTIONS) {
       server: URL_S3_SERVER,
       scrubFilename: (filename) =>
         `${new Date().valueOf()}-${_options.name || getFileName(filename)}${getFileType(filename)}`,
-      s3path: `AppartaWeb/static/${_options.path}/${
+      s3path: `${_options.path || 'AppartaWeb/static/'}${
         _options.name ? `${_options.name}/` : ''
       }`,
     });

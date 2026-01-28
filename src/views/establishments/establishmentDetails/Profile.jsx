@@ -785,7 +785,8 @@ const Profile = ({ establishmentData, setEstablishmentData }) => {
                                     setEstablishmentWebBanners(_.map(files, ({ fileKey }) => ({ fileKey })))
                                 }}
                                 maxFiles={5}
-                                path={''}
+                                path={`establishment/${establishmentData.id}/gallery/`}
+                                filePath={`establishment/${establishmentData.id}/gallery/`}
                             />
                         </Col>
                     </Row>
