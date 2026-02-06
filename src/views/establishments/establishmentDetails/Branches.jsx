@@ -72,7 +72,7 @@ const columns = ({ invoiceProfiles, cities, zonesTable, placesTable, onEdit, onR
         dataIndex: "invoice_profile_id",
         key: "invoice_profile_id",
         sorter: true,
-        render: (value,record) => record?.invoice_profile?.legal_name || value
+        render: (value, record) => record?.invoice_profile?.legal_name || value
     },
     {
         title: "Zona",
@@ -175,12 +175,13 @@ const columns = ({ invoiceProfiles, cities, zonesTable, placesTable, onEdit, onR
 const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
 
     const establishmentService = getService('establishments-branchs');
-    const invoiceProfilesService =  getService('invoice-profiles');
+    const invoiceProfilesService = getService('invoice-profiles');
     const [establishmentBranchesOptions, setEstablishmentBranchesOptions] = useState([]);
     const [establishmentBranchesOptionsTable, setEstablishmentBranchesOptionsTable] = useState([]);
     const [establishmentBranchSelected, setEstablishmentBranchSelected] = useState();
-    console.log('establishmentBranchSelectedestablishmentBranchSelected',establishmentBranchSelected)
+
     const [form] = Form.useForm();
+    const invoicePaymentMethod = Form.useWatch('invoice_payment_method', form);
     const selectedCityId = Form.useWatch('city_id', form);
     const selectedBranchId = Form.useWatch('id', form);
     const recurrenId = Form.useWatch('tmp_number_months_for_recurring_payment', form);
@@ -200,16 +201,16 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
     const getProfileSelected = (profile_id) => {
         invoiceProfilesService.find({
             query: {
-            id: profile_id,
+                id: profile_id,
             },
         }).then((response) => {
             // console.log('responsedata',response?.data)
-            if(response?.data){
+            if (response?.data) {
                 // setEstablishmentBranchesOptionsTable(response?.data)
-                setEstablishmentBranchesOptions(_.sortBy(response?.data , [({ legal_name }) => legal_name]));
+                setEstablishmentBranchesOptions(_.sortBy(response?.data, [({ legal_name }) => legal_name]));
             }
         })
-        .catch((err) => message.error(err));
+            .catch((err) => message.error(err));
     };
 
     const onEdit = (record) => {
@@ -227,23 +228,24 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
         setDrawerVisible(true);
     };
 
-     
-    
+
+
     const getEstablishmentBranches = (value) => {
-            if (value === '') {
-                setEstablishmentBranchesOptions([])
-                return;
-            }
-            invoiceProfilesService.find({
-                query: {
+        if (value === '') {
+            setEstablishmentBranchesOptions([])
+            return;
+        }
+        invoiceProfilesService.find({
+            query: {
                 q: value,
-                },
-            }).then((response) => {
-                    console.log('responsedata',response?.data ,_.sortBy(response?.data , [({ legal_name }) => legal_name]))
-                    setEstablishmentBranchesOptions(_.sortBy(response?.data , [({ legal_name }) => legal_name]));
-            })
+                establishment_id,
+            },
+        }).then((response) => {
+
+            setEstablishmentBranchesOptions(_.sortBy(response?.data, [({ legal_name }) => legal_name]));
+        })
             .catch((err) => message.error(err));
-        };
+    };
 
     const debounceGetEstablishmentBranches = debounce(getEstablishmentBranches, 500, { maxWait: 800 });
 
@@ -566,9 +568,9 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
                                 )
                             }
                         </Select> */}
-                       
 
-                  
+
+
                         <Select
                             showSearch
                             name='invoice_profile_id'
@@ -588,20 +590,36 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
                             }
                         >
                             {
-                                _.map(establishmentBranchesOptions, ({ id,nit, legal_name }, index) =>
+                                _.map(establishmentBranchesOptions, ({ id, nit, legal_name }, index) =>
                                     <Select.Option key={index} value={id}>
-                                       {`${nit} - ${legal_name}`}
+                                        {`${nit} - ${legal_name}`}
                                     </Select.Option>
                                 )
                             }
                         </Select>
                         <Select
-                            flex={1}
+                            flex={0.5}
                             name='invoice_payment_method'
                             label="Método de pago"
                         >
                             {
                                 _.map(INVOICE_PAYMENT_METHOD, ({ id, name }, index) =>
+                                    <Select.Option
+                                        key={index}
+                                        value={id}
+                                    >
+                                        {name}
+                                    </Select.Option>
+                                )
+                            }
+                        </Select>
+                        <Select
+                            flex={0.5}
+                            name='show_pop_ups_created_by_invoice_payment_crond'
+                            label="Mostrar pop-ups cobro de facturas"
+                        >
+                            {
+                                _.map(STATUS, ({ id, name }, index) =>
                                     <Select.Option
                                         key={index}
                                         value={id}
@@ -680,7 +698,7 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
                             name='description_food_types'
                             label="Descripción Tipo Comida"
                         />
-                       
+
 
                         <RichTextField
                             flex={1}
@@ -917,6 +935,32 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
                         }
 
                     </SimpleForm>
+
+
+                    {
+                        invoicePaymentMethod === 'credit_card' ? (
+                            <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                <AsyncButton
+                                    type="primary"
+                                    style={{ borderRadius: '0.5rem', width: '80%' }}
+                                    onClick={() => establishmentService.get(selectedBranchId, {
+                                        query: {
+                                            $client: {
+                                                sendWelcomeEmailCreditCardInput: true
+                                            }
+                                        }
+                                    }).then((response) => {
+                                        message.success('Solicitud de prueba enviada correctamente');
+                                    }).catch((err) => {
+                                        message.error(err.message);
+                                    })}
+                                >
+                                    Solicitar prueba
+                                </AsyncButton>
+                            </div>
+                        ) : null
+                    }
+
                 </Drawer>
             }
         </>

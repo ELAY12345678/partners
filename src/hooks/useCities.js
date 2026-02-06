@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { message } from 'antd';
 import { getService } from '../services';
 
-export const useCities = () => {
+export const useCities = ( filters = {} ) => {
     const citiesService = getService("cities");
 
     const [cities, setCities] = useState([]);
@@ -13,6 +13,7 @@ export const useCities = () => {
         citiesService
             .find({
                 query: {
+                    ...filters,
                     $limit: 100000,
                     $sort: {
                         name: 1,

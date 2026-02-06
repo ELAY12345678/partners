@@ -4,12 +4,15 @@ export const API_KEY_GOOGLE_MAPS = process.env.REACT_APP_API_KEY_GOOGLE_MAPS;
 
 /* api */
 export const URL_BASE_API_PROD = "https://api.apparta.co";
+/* api crond */
+export const URL_BASE_API_PROD_CROND = "https://crond.apparta.co";
+// export const URL_BASE_API_PROD = "https://api.apparta.co";
 /* api staging*/
 export const URL_BASE_API_STG = "https://api-staging.apparta.co";
 /* api local*/
 export const URL_BASE_API_LOCAL = "https://cj6z0tvp-8080.use2.devtunnels.ms";
 
-export const URL_BASE_API = window.location.hostname === "localhost" ? URL_BASE_API_PROD : URL_BASE_API_PROD;
+export const URL_BASE_API = window.location.hostname === "localhost" ? URL_BASE_API_PROD_CROND : URL_BASE_API_PROD_CROND;
 export const URL_BASE = URL_BASE_API;
 
 /* Default Settings */

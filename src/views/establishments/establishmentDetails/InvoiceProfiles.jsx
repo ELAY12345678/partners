@@ -1,6 +1,6 @@
 import { Button, Drawer, Form, Input, message, Select } from 'antd';
-import _ from 'lodash';
-import React, { useState } from 'react';
+import _, { debounce } from 'lodash';
+import React, { useEffect, useState } from 'react';
 import { AiOutlineDelete, AiOutlineEdit, AiOutlinePlus } from 'react-icons/ai';
 import AsyncButton from '../../../components/asyncButton';
 import { Grid } from '../../../components/com';
@@ -33,7 +33,10 @@ const columns = ({ cities, onEdit, onRemove }) => [
         dataIndex: "city_id",
         key: "city_id",
         sorter: true,
-        render: (value) => _.find(cities, ({ id }) => id === value)?.name || value
+        render: (value) => {
+            const city = _.find(cities, ({ id }) => id === value);
+            return city ? `${city.name} - ${city.country?.name || ''}` : '';
+        }
     },
     {
         title: "Nombre legal",
@@ -68,7 +71,7 @@ const columns = ({ cities, onEdit, onRemove }) => [
     {
         title: "Acciones",
         dataIndex: 'id',
-        render: (id,records) =>
+        render: (id, records) =>
             <>
                 <Button
                     type="text"
@@ -94,7 +97,11 @@ const InvoiceProfiles = ({ establishment_id, getInvoiceProfiles }) => {
     const [initialValues, setinitialValues] = useState({})
     const [isNewProfile, setisNewProfile] = useState(false)
     const invoiceProfileService = getService('invoice-profiles');
-    const [cities, loadingCities] = useCities();
+    const citiesService = getService("cities");
+    const [loadingCities, setLoadingCities] = useState(false);
+    const [citiesOptions, setCitiesOptions] = useState([]);
+    const [returnToParentData, setReturnToParentData] = useState(null);
+    const [cities, setCities] = useState([]);
 
     const onEdit = (record) => {
         setSelectedProfile(record);
@@ -115,8 +122,8 @@ const InvoiceProfiles = ({ establishment_id, getInvoiceProfiles }) => {
                 nit
             }
         }).then(({ data }) => {
-            if((data || []).length){
-                console.log('data?.[0]data?.[0]',data?.[0])
+            if ((data || []).length) {
+               
                 setisNewProfile(true)
                 // setSelectedProfile({...data?.[0]})
                 form.setFieldsValue({
@@ -124,7 +131,7 @@ const InvoiceProfiles = ({ establishment_id, getInvoiceProfiles }) => {
                     establishment_id: establishment_id,
                     id: undefined
                 })
-            }else{
+            } else {
                 form.resetFields();
                 form.setFieldsValue({
                     "nit": nit,
@@ -147,6 +154,59 @@ const InvoiceProfiles = ({ establishment_id, getInvoiceProfiles }) => {
             })
             .catch(err => message.error(err.message));
     };
+
+    const getCities = (value, city_id) => {
+        if (value === '' && !city_id ) {
+            setCitiesOptions([])
+            return;
+        }
+        setLoadingCities(true);
+        citiesService.find({
+            query: {
+                q: value,
+                id: city_id,
+                $limit: 100000,
+                $sort: {
+                    name: 1,
+                },
+            },
+        }).then((response) => {
+            setCitiesOptions(response?.data);
+        })
+            .catch((err) => message.error(err)).finally(() => setLoadingCities(false));
+    };
+
+    const getCitiesByIds = (cities_ids) => {
+        if (!cities_ids) {
+            return;
+        }
+        citiesService.find({
+            query: {
+                id: { $in: cities_ids },
+                $limit: 100000,
+                $sort: {
+                    name: 1,
+                },
+            },
+        }).then((response) => {
+            setCities(response?.data);
+        })
+            .catch((err) => { });
+    };
+
+    const debounceGetCities = debounce(getCities, 500, { maxWait: 800 });
+
+    useEffect(() => {
+        if (returnToParentData?.length ) {
+            getCitiesByIds([...new Set(returnToParentData.map(({ city_id }) => city_id))]);
+        }
+    }, [returnToParentData, updateSource]);
+
+    useEffect(() => {
+        if (selectedProfile?.city_id) {
+            getCities(undefined, selectedProfile?.city_id);
+        }
+    }, [selectedProfile?.city_id]);
 
     return (
         <>
@@ -174,6 +234,7 @@ const InvoiceProfiles = ({ establishment_id, getInvoiceProfiles }) => {
                         </RoundedButton>
                     </div>
                 }
+                returnToParentData={(data) => setReturnToParentData(data)}
             />
             {
                 drawerVisible
@@ -234,20 +295,25 @@ const InvoiceProfiles = ({ establishment_id, getInvoiceProfiles }) => {
                             validations={[{ required: true, message: 'Dirección es requerida' }]}
                         />
                         <Select
-                            flex={0.5}
+                            showSearch
+                            flex={1}
                             size='large'
                             loading={loadingCities}
                             name='city_id'
                             label="Ciudad"
                             validations={[{ required: true, message: 'Ciudad es requerida' }]}
+                            onSearch={debounceGetCities}
+                            optionFilterProp="children"
+                            filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
                         >
                             {
-                                _.map(cities, ({ id, name }, index) =>
+                                _.map(citiesOptions, ({ id, name,
+                                    country }, index) =>
                                     <Select.Option
                                         key={index}
                                         value={id}
                                     >
-                                        {name}
+                                        {`${name} - ${country?.name || ''}`}
                                     </Select.Option>
                                 )
                             }
