@@ -693,12 +693,13 @@ const AdminInvoices = () => {
                         message.success("Factura actualizada!")
                     )
             } else {
-                const [establishment_id, establishment_branch_id] = data?.establishment_branch_id?.split('-');
+                const [establishment_id, establishment_branch_id, invoice_profile_id] = data?.establishment_branch_id?.split('-');
                 await invoicePaymentsService.create({
                     create_invoice_payments_directly: true,
                     ...data,
                     establishment_id: Number(establishment_id),
                     establishment_branch_id: Number(establishment_branch_id),
+                    invoice_profile_id: Number(invoice_profile_id),
                 })
                     .then(() =>
                         message.success("Factura creada!")
@@ -740,6 +741,8 @@ const AdminInvoices = () => {
             meta_pay_bank_id: null,
         })
     }, [methodPayment, typePayment, establishmentBranchSelected])
+
+
 
 
     return (
@@ -850,7 +853,9 @@ const AdminInvoices = () => {
                         </Box>
                     </Col>
                 </Row>
+
                 <Divider style={{ background: 'transparent', borderTop: 0, marginTop: 0 }} />
+
                 <Grid
                     selection={true}
                     onChangeSelection={(_, selectedRecords) => {
@@ -1130,8 +1135,8 @@ const AdminInvoices = () => {
                                     filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
                                 >
                                     {
-                                        _.map(establishmentBranchesOptions, ({ establishment_branch_id, establishment_id, full_name }, index) =>
-                                            <Select.Option key={index} value={`${establishment_id}-${establishment_branch_id}`}>
+                                        _.map(establishmentBranchesOptions, ({ establishment_branch_id, establishment_id, full_name, invoice_profile_id }, index) =>
+                                            <Select.Option key={index} value={`${establishment_id}-${establishment_branch_id}-${invoice_profile_id}`}>
                                                 {full_name}
                                             </Select.Option>
                                         )
