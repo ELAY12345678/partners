@@ -3,7 +3,7 @@ import locale from "antd/es/date-picker/locale/es_ES";
 import _, { debounce } from 'lodash';
 import moment from 'moment';
 import numeral from 'numeral';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AiOutlineDelete, AiOutlineEdit, AiOutlinePlus } from 'react-icons/ai';
 import AsyncButton from '../../../components/asyncButton';
 import { Grid } from '../../../components/com';
@@ -65,7 +65,10 @@ const columns = ({ invoiceProfiles, cities, zonesTable, placesTable, onEdit, onR
         dataIndex: "city_id",
         key: "city_id",
         sorter: true,
-        render: (value) => _.find(cities, ({ id }) => id === value)?.name || value
+        render: (value) => {
+            const city = _.find(cities, ({ id }) => id === value);
+            return city ? `${city.name} - ${city.country?.name || ''}` : '';
+        }
     },
     {
         title: "Perfil de Facturación",
@@ -191,12 +194,19 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
     const [updateSource, setUpdateSource] = useState(false);
     const [selectedEstablishment, setSelectedEstablishment] = useState();
 
-    const [cities, loadingCities] = useCities();
+    // const [cities, loadingCities] = useCities();
     const [zones, loadingZones] = useZones({ city_id: selectedCityId });
     const [zonesTable] = useZones({ city_id: undefined });
     const [places, loadingPlaces] = usePlaces({ city_id: selectedCityId });
     const [placesTable] = usePlaces({ city_id: undefined });
     const { recurrenciOptions } = useRecurrenciOptions();
+
+
+    const citiesService = getService("cities");
+    const [loadingCities, setLoadingCities] = useState(false);
+    const [citiesOptions, setCitiesOptions] = useState([]);
+    const [returnToParentData, setReturnToParentData] = useState(null);
+    const [cities, setCities] = useState([]);
 
     const getProfileSelected = (profile_id) => {
         invoiceProfilesService.find({
@@ -227,7 +237,6 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
         );
         setDrawerVisible(true);
     };
-
 
 
     const getEstablishmentBranches = (value) => {
@@ -285,6 +294,13 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
 
         const { id, ...rest } = data;
 
+        const city_id = data?.city_id;
+        const countrySelected = _.find(citiesOptions, ({id})=> id === city_id);
+        if(!_.isEmpty(countrySelected)){
+            rest.country_id = countrySelected?.country_id;
+            rest.state_id = countrySelected?.state_id;
+        }
+
         if (selectedBranchId) {
             await establishmentService.patch(selectedBranchId, formattValues({ ...rest }))
                 .then(() => {
@@ -308,6 +324,59 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
         }
     };
 
+
+    const getCities = (value, city_id) => {
+        if (value === '' && !city_id ) {
+            setCitiesOptions([])
+            return;
+        }
+        setLoadingCities(true);
+        citiesService.find({
+            query: {
+                q: value,
+                id: city_id,
+                $limit: 100000,
+                $sort: {
+                    name: 1,
+                },
+            },
+        }).then((response) => {
+            setCitiesOptions(response?.data);
+        })
+            .catch((err) => message.error(err)).finally(() => setLoadingCities(false));
+    };
+
+    const getCitiesByIds = (cities_ids) => {
+        if (!cities_ids) {
+            return;
+        }
+        citiesService.find({
+            query: {
+                id: { $in: cities_ids },
+                $limit: 100000,
+                $sort: {
+                    name: 1,
+                },
+            },
+        }).then((response) => {
+            setCities(response?.data);
+        })
+            .catch((err) => { });
+    };
+
+    const debounceGetCities = debounce(getCities, 500, { maxWait: 800 });
+
+    useEffect(() => {
+        if (returnToParentData?.length ) {
+            getCitiesByIds([...new Set(returnToParentData.map(({ city_id }) => city_id))]);
+        }
+    }, [returnToParentData, updateSource]);
+
+    useEffect(() => {
+        if (selectedEstablishment?.city_id) {
+            getCities(undefined, selectedEstablishment?.city_id);
+        }
+    }, [selectedEstablishment?.city_id]);
 
     return (
         <>
@@ -341,6 +410,7 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
                         </RoundedButton>
                     </div>
                 }
+                returnToParentData={(data) => setReturnToParentData(data)}
             />
             {
                 drawerVisible
@@ -493,19 +563,25 @@ const Branches = ({ establishment_id, invoiceProfiles, payCommissionsFor }) => {
                             }
                         </Select>
                         <Select
-                            flex={0.5}
+                            showSearch
+                            flex={1}
+                            size='large'
                             loading={loadingCities}
                             name='city_id'
                             label="Ciudad"
                             validations={[{ required: true, message: 'Ciudad es requerida' }]}
+                            onSearch={debounceGetCities}
+                            optionFilterProp="children"
+                            filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
                         >
                             {
-                                _.map(cities, ({ id, name }, index) =>
+                                _.map(citiesOptions, ({ id, name,
+                                    country }, index) =>
                                     <Select.Option
                                         key={index}
                                         value={id}
                                     >
-                                        {name}
+                                        {`${name} - ${country?.name || ''}`}
                                     </Select.Option>
                                 )
                             }
