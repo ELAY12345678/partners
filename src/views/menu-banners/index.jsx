@@ -2,6 +2,7 @@ import { Layout, Tabs } from 'antd';
 import React from 'react';
 import { useSelector } from "react-redux";
 import { TabsStyled } from '../../components/Styles';
+import PopUpProduct from '../pop-up/PopUpProduct';
 import PopUpSystem from '../pop-up/PopUpSystem';
 import Banners from './Banners';
 import BannersSchedule from './BannersSchedule';
@@ -25,12 +26,16 @@ const BannersManager = ({ location }) => {
                 <Tabs.TabPane tab="Perfil de grupos" key="3">
                     <GroupProfile />
                 </Tabs.TabPane>
-                {[1,1996].includes(establishment_id) ? 
-                    <Tabs.TabPane tab="Pop-ups de sistema" key="4 ">
-                        <PopUpSystem />
-                    </Tabs.TabPane>
-                : null}
-              
+                {[1, 1996].includes(establishment_id) ? (
+                    <>
+                        <Tabs.TabPane tab="Pop-ups de sistema" key="4">
+                            <PopUpSystem />
+                        </Tabs.TabPane>
+                        <Tabs.TabPane tab="Pop-ups product" key="5">
+                            <PopUpProduct />
+                        </Tabs.TabPane>
+                    </>
+                ) : null}
             </TabsStyled>
         </Layout.Content>
     );

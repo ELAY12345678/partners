@@ -104,8 +104,8 @@ const DragAndDropUploader = ({
 
   const handleRemove = file => {
     const tempFileList = _.filter(fileList, ({ uid }) => uid !== file?.uid);
-    console.log(tempFileList)
-    // setFileList(tempFileList);
+    setFileList(tempFileList);
+    if (onChange) onChange(tempFileList);
   };
 
   const handleChange = info => {
@@ -113,6 +113,7 @@ const DragAndDropUploader = ({
     const tempFileList = [...newFileList];
     const sliceFileList = (maxFiles && tempFileList?.length) > maxFiles ? _.slice(tempFileList, 0, maxFiles) : tempFileList;
     setFileList(sliceFileList || []);
+    if (onChange) onChange(sliceFileList || []);
   };
 
   const handlePreview = async file => {
