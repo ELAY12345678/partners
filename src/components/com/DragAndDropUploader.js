@@ -109,9 +109,19 @@ const DragAndDropUploader = ({
   };
 
   const handleChange = info => {
-    const { file, fileList: newFileList, event } = info;
+    const { fileList: newFileList } = info;
     const tempFileList = [...newFileList];
-    const sliceFileList = (maxFiles && tempFileList?.length) > maxFiles ? _.slice(tempFileList, 0, maxFiles) : tempFileList;
+    const validFileList = tempFileList.filter((file) => {
+      if (!file.originFileObj) return true;
+      const allowed = formats.includes(file.originFileObj.type);
+      if (!allowed) {
+        message.error(
+          `Solo se permiten imágenes: ${formats.toString().replace(/(image\/)/g, '')}`
+        );
+      }
+      return allowed;
+    });
+    const sliceFileList = (maxFiles && validFileList?.length) > maxFiles ? _.slice(validFileList, 0, maxFiles) : validFileList;
     setFileList(sliceFileList || []);
     if (onChange) onChange(sliceFileList || []);
   };
@@ -132,6 +142,7 @@ const DragAndDropUploader = ({
           <Dragger
             fileList={fileList}
             listType="picture-card"
+            accept={formats.join(',')}
             showRemoveIcon={showRemoveIcon || false}
             showUploadList={showUploadList}
             multiple={multiple}

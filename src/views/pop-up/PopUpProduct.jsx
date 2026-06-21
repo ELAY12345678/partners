@@ -1,6 +1,6 @@
 import { Button, Col, Drawer, Form, Image, Input, message, Row, Select, Tag } from 'antd';
 import _ from 'lodash';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { AiOutlineClose, AiOutlineDelete, AiOutlineEdit, AiOutlinePlus } from 'react-icons/ai';
 import AsyncButton from '../../components/asyncButton';
@@ -11,6 +11,9 @@ import { RoundedButton } from '../../components/com/grid/Styles';
 import { S3_PATH_IMAGE_HANDLER, URL_S3 } from '../../constants';
 import { getService } from '../../services';
 import { onUploadFileVersionHurgot } from '../../utils/FileUploader';
+
+const MEDIA_FORMATS = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+const MEDIA_FILE_MATCH = '\\.(jpe?g|png|gif)$';
 
 const getFilePath = (file) => file?.fileKey || file?.filename || file?.key;
 
@@ -23,6 +26,7 @@ const uploadFiles = (files, establishment_id) =>
         }
         onUploadFileVersionHurgot(originFiles, {
             path: `pop-ups/product/${establishment_id}/`,
+            validate: { match: MEDIA_FILE_MATCH },
         }).subscribe({
             next: (uploaded) => {
                 const list = Array.isArray(uploaded) ? uploaded : [uploaded];
@@ -34,14 +38,23 @@ const uploadFiles = (files, establishment_id) =>
 
 const parseMediaList = (value) => {
     if (!value) return [];
-    if (Array.isArray(value)) return value;
-    try {
-        const parsed = JSON.parse(value);
-        return Array.isArray(parsed) ? parsed : [];
-    } catch {
-        return typeof value === 'string' ? [value] : [];
+    let list = value;
+    if (typeof value === 'string') {
+        try {
+            list = JSON.parse(value);
+        } catch {
+            return value.trim() ? [value] : [];
+        }
     }
+    if (!Array.isArray(list)) return [];
+    return list
+        .map((item) =>
+            typeof item === 'string' ? item : item?.path || item?.url || item?.fileKey || ''
+        )
+        .filter(Boolean);
 };
+
+const stringifyMediaList = (list) => JSON.stringify(parseMediaList(list));
 
 const DISPLAY_DEVICES = [
     { id: 'web', name: 'Web' },
@@ -134,22 +147,53 @@ const PopUpProduct = () => {
     };
 
     const onEdit = (record) => {
-        setSelectedPopUp(record);
-        setMediaList(parseMediaList(record?.media_list));
+        const parsedMedia = parseMediaList(record?.media_list);
+        setSelectedPopUp({
+            ...record,
+            display_limit: record?.display_limit != null ? Number(record.display_limit) : record?.display_limit,
+        });
+        setMediaList(parsedMedia);
         setPendingFileList([]);
         setDrawerVisible(true);
     };
 
+    useEffect(() => {
+        if (!drawerVisible) return;
+
+        if (selectedPopUp?.id) {
+            form.setFieldsValue({
+                ..._.mapValues(selectedPopUp, (value) => (value !== null ? value : undefined)),
+                media_list: stringifyMediaList(mediaList),
+                display_limit:
+                    selectedPopUp.display_limit != null
+                        ? Number(selectedPopUp.display_limit)
+                        : selectedPopUp.display_limit,
+            });
+        } else {
+            form.setFieldsValue({ media_list: stringifyMediaList(mediaList) });
+        }
+    }, [drawerVisible, selectedPopUp?.id]);
+
+    useEffect(() => {
+        if (drawerVisible) {
+            form.setFieldsValue({ media_list: stringifyMediaList(mediaList) });
+        }
+    }, [mediaList, drawerVisible]);
+
     const handleMediaUpload = async (files) => {
         const paths = _.map(files, getFilePath).filter(Boolean);
         if (!paths.length) return;
-        setMediaList((prev) => [...prev, ...paths]);
+        const nextMediaList = [...mediaList, ...paths];
+        setMediaList(nextMediaList);
+        form.setFieldsValue({ media_list: stringifyMediaList(nextMediaList) });
         setPendingFileList([]);
         message.success('Imágenes cargadas');
     };
 
     const handleRemoveMedia = (path) => {
-        setMediaList((prev) => prev.filter((item) => item !== path));
+        const nextMediaList = mediaList.filter((item) => item !== path);
+        setMediaList(nextMediaList);
+        form.setFieldsValue({ media_list: stringifyMediaList(nextMediaList) });
     };
 
     const handleSubmit = async (err, values) => {
@@ -180,7 +224,7 @@ const PopUpProduct = () => {
             sub_title: values?.sub_title,
             display_device: values?.display_device,
             display_limit: values?.display_limit,
-            media_list: JSON.stringify(finalMediaList),
+            media_list: stringifyMediaList(finalMediaList),
             type: 'product',
             establishment_id,
         };
@@ -252,11 +296,20 @@ const PopUpProduct = () => {
                     onClose={closeDrawer}
                 >
                     <SimpleForm
+                        allowNull={true}
                         textAcceptButton={uploadingMedia ? 'Subiendo imágenes...' : 'Guardar'}
-                        initialValues={selectedPopUp}
+                        initialValues={{
+                            ...selectedPopUp,
+                            media_list: stringifyMediaList(mediaList),
+                            display_limit:
+                                selectedPopUp?.display_limit != null
+                                    ? Number(selectedPopUp.display_limit)
+                                    : selectedPopUp?.display_limit,
+                        }}
                         onSubmit={handleSubmit}
                         form={form}
                     >
+                        <Input type="hidden" name="media_list" />
                         <div style={{ width: '100%', marginBottom: 16 }}>
                             <div style={{ marginBottom: 8, fontWeight: 500 }}>Imágenes (media_list)</div>
                             {mediaList.length > 0 && (
@@ -293,6 +346,8 @@ const PopUpProduct = () => {
                             <DragAndDropUploader
                                 path={`pop-ups/product/${establishment_id}/`}
                                 filePath={`pop-ups/product/${establishment_id}/`}
+                                formats={MEDIA_FORMATS}
+                                fileMatch={MEDIA_FILE_MATCH}
                                 showUploadList={true}
                                 showRemoveIcon={true}
                                 onChange={setPendingFileList}
