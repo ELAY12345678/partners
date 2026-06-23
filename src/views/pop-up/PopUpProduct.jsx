@@ -1,22 +1,22 @@
 import {
-    Button,
-    Col,
-    Drawer,
-    Form,
-    Image,
-    Input,
-    message,
-    Row,
-    Select,
-    Tag,
+  Button,
+  Col,
+  Drawer,
+  Form,
+  Image,
+  Input,
+  message,
+  Row,
+  Select,
+  Tag,
 } from "antd";
 import _ from "lodash";
 import { useEffect, useState } from "react";
 import {
-    AiOutlineClose,
-    AiOutlineDelete,
-    AiOutlineEdit,
-    AiOutlinePlus,
+  AiOutlineClose,
+  AiOutlineDelete,
+  AiOutlineEdit,
+  AiOutlinePlus,
 } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import AsyncButton from "../../components/asyncButton";
@@ -264,6 +264,7 @@ const PopUpProduct = () => {
 
     const data = {
       name: values?.name,
+      title: values?.title,
       sub_title: values?.sub_title,
       description: values?.description,
       display_device: values?.display_device,
@@ -357,9 +358,7 @@ const PopUpProduct = () => {
           >
             <Input type="hidden" name="media_list" />
             <div style={{ width: "100%", marginBottom: 16 }}>
-              <div style={{ marginBottom: 8, fontWeight: 500 }}>
-                Imágenes (media_list)
-              </div>
+              <div style={{ marginBottom: 8, fontWeight: 500 }}>Imágenes</div>
               {mediaList.length > 0 && (
                 <Row gutter={[8, 8]} style={{ marginBottom: 16 }}>
                   {_.map(mediaList, (path, index) => (
@@ -407,6 +406,12 @@ const PopUpProduct = () => {
               name="name"
               label="Nombre"
               validations={[{ required: true, message: "Nombre es requerido" }]}
+            />
+            <Input
+              flex={1}
+              name="title"
+              label="Título"
+              validations={[{ required: true, message: "Título es requerido" }]}
             />
 
             <Input
