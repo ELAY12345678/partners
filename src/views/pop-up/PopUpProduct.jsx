@@ -429,6 +429,10 @@ const PopUpProduct = () => {
               label="Descripción"
               height="280px"
               defaultValue={selectedPopUp?.description || ""}
+              setDefaultStyle="font-size: 14px; color: #000000;"
+              setOptions={{
+                defaultStyle: "font-size: 14px; color: #000000;",
+              }}
               validations={[
                 { required: true, message: "Descripción es requerida" },
                 {
