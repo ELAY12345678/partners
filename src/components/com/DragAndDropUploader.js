@@ -152,9 +152,10 @@ const DragAndDropUploader = ({
             onChange={handleChange}
             loadin
             disabled={progress !== 0}
+            className="drag-and-drop-uploader"
             style={{ width: '100%' }}
           >
-            <div style={{ width: '100%', padding: '0 12rem' }}>
+            <div className="drag-and-drop-uploader-content">
               <p className="ant-upload-drag-icon">
                 <AiOutlineInbox />
               </p>
@@ -167,6 +168,41 @@ const DragAndDropUploader = ({
               </p>
             </div>
           </Dragger>
+          <style>{`
+            .drag-and-drop-uploader .ant-upload-drag {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            .drag-and-drop-uploader .ant-upload-btn {
+              display: flex !important;
+              align-items: center;
+              justify-content: center;
+              width: 100%;
+              padding: 0 !important;
+            }
+            .drag-and-drop-uploader-content {
+              width: 100%;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              text-align: center;
+              padding: 20px 16px;
+            }
+            .drag-and-drop-uploader-content .ant-upload-drag-icon {
+              margin: 0 0 8px;
+            }
+            .drag-and-drop-uploader-content .ant-upload-text,
+            .drag-and-drop-uploader-content .ant-upload-hint {
+              margin: 0;
+            }
+            .drag-and-drop-uploader.ant-upload-picture-card-wrapper .ant-upload-list {
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: center;
+            }
+          `}</style>
         </Spin>
       ) : (
         <Upload
