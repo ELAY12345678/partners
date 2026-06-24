@@ -25,6 +25,7 @@ import DragAndDropUploader from "../../components/com/DragAndDropUploader";
 import { SimpleForm } from "../../components/com/form/SimpleForm";
 import { RoundedButton } from "../../components/com/grid/Styles";
 import RichTextField from "../../components/richTextField";
+import { encodeUnicodeForStorage } from "../../components/richTextField/encoding";
 import { S3_PATH_IMAGE_HANDLER, URL_S3 } from "../../constants";
 import { getService } from "../../services";
 import { onUploadFileVersionHurgot } from "../../utils/FileUploader";
@@ -266,7 +267,7 @@ const PopUpProduct = () => {
       name: values?.name,
       title: values?.title,
       sub_title: values?.sub_title,
-      description: values?.description,
+      description: encodeUnicodeForStorage(values?.description),
       display_device: values?.display_device,
       display_limit: values?.display_limit,
       media_list: stringifyMediaList(finalMediaList),
@@ -428,6 +429,7 @@ const PopUpProduct = () => {
               name="description"
               label="Descripción"
               height="280px"
+              enableEmojis={true}
               defaultValue={selectedPopUp?.description || ""}
               setDefaultStyle="font-size: 14px; color: #000000;"
               setOptions={{
