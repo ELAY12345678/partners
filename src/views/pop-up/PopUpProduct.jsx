@@ -92,6 +92,11 @@ const DISPLAY_LIMITS = [
   { id: 4, name: "4 veces" },
 ];
 
+const STATUS = [
+  { id: "active", name: "Activo" },
+  { id: "inactive", name: "Inactivo" },
+];
+
 const columns = ({ onRemove, onEdit }) => [
   {
     title: "Nombre",
@@ -205,13 +210,17 @@ const PopUpProduct = () => {
           value !== null ? value : undefined,
         ),
         media_list: stringifyMediaList(mediaList),
+        status: selectedPopUp?.status || "active",
         display_limit:
           selectedPopUp.display_limit != null
             ? Number(selectedPopUp.display_limit)
             : selectedPopUp.display_limit,
       });
     } else {
-      form.setFieldsValue({ media_list: stringifyMediaList(mediaList) });
+      form.setFieldsValue({
+        media_list: stringifyMediaList(mediaList),
+        status: "active",
+      });
     }
   }, [drawerVisible, selectedPopUp?.id]);
 
@@ -271,6 +280,7 @@ const PopUpProduct = () => {
       display_device: values?.display_device,
       display_limit: values?.display_limit,
       media_list: stringifyMediaList(finalMediaList),
+      status: selectedPopUp?.id ? values?.status || "active" : "active",
       type: "product",
       establishment_id,
     };
@@ -348,6 +358,7 @@ const PopUpProduct = () => {
             }
             initialValues={{
               ...selectedPopUp,
+              status: selectedPopUp?.status || "active",
               media_list: stringifyMediaList(mediaList),
               display_limit:
                 selectedPopUp?.display_limit != null
@@ -474,6 +485,19 @@ const PopUpProduct = () => {
               validations={[{ required: true, message: "Límite es requerido" }]}
             >
               {_.map(DISPLAY_LIMITS, ({ id, name }, index) => (
+                <Select.Option key={index} value={id}>
+                  {name}
+                </Select.Option>
+              ))}
+            </Select>
+            <Select
+              flex={1}
+              name="status"
+              label="Estado"
+              size="large"
+              disabled={!selectedPopUp?.id}
+            >
+              {_.map(STATUS, ({ id, name }, index) => (
                 <Select.Option key={index} value={id}>
                   {name}
                 </Select.Option>
