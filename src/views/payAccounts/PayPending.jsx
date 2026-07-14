@@ -129,11 +129,12 @@ const PayPending = () => {
 
     const [updateSource, setUpdateSource] = useState(false);
 
-    const handleExportExcel = async () => {
+    const handleExportExcel = async (country) => {
         await payWithdrawalService.find({
             query: {
                 $client: {
                     exports: "withdrawalPendingPayment",
+                    country,
                 },
             },
         }).then((response) => {
@@ -177,7 +178,7 @@ const PayPending = () => {
                 updateSource={updateSource}
                 columns={columns({ setUpdateSource })}
                 title={
-                    <Row gutter={16} align="middle">
+                    <Row gutter={[4, 4]} align="middle">
                         <Col>
                             <FileUploader
                                 preview={false}
@@ -196,6 +197,26 @@ const PayPending = () => {
                                 onClick={handleExportExcel}
                             >
                                 Exportar pagos pendientes
+                            </AsyncButton>
+                        </Col>
+                        <Col>
+                            <AsyncButton
+                                type='primary'
+                                size='middle'
+                                style={{ borderRadius: '0.5rem' }}
+                                onClick={async()=> await handleExportExcel("CO")}
+                            >
+                                Exportar pagos pendientes Colombia
+                            </AsyncButton>
+                        </Col>
+                        <Col>
+                            <AsyncButton
+                                type='primary'
+                                size='middle'
+                                style={{ borderRadius: '0.5rem' }}
+                                onClick={async()=> await handleExportExcel("AR")}
+                            >
+                                Exportar pagos pendientes Argentina
                             </AsyncButton>
                         </Col>
                         <Col>
