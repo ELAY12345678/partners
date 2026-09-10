@@ -5,7 +5,7 @@ import { FiUsers } from 'react-icons/fi';
 import { GrSecure } from 'react-icons/gr';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 import { IoCalendarClearOutline, IoDocumentTextOutline, IoFastFoodOutline, IoFootstepsOutline, IoRestaurantOutline, IoStorefrontOutline } from 'react-icons/io5';
-import { MdFormatListNumbered, MdLocationSearching, MdOutlineCampaign, MdOutlineNotificationsActive, MdOutlineSupportAgent } from 'react-icons/md';
+import { MdFormatListNumbered, MdLocationSearching, MdOutlineCampaign, MdOutlineNotificationsActive, MdOutlineSupportAgent, MdOutlineSms } from 'react-icons/md';
 import { RiCoupon2Line, RiUserStarLine } from 'react-icons/ri';
 
 const menu = {
@@ -214,7 +214,11 @@ const menu = {
         //   key: "/dashboard/management/pop-up",
         //   icon: <BsPinMap />,
         // },
-        
+        {
+          label: "Precios de mensajería",
+          key: "/dashboard/management/table-campaign-messaging-pricing",
+          icon: <MdOutlineSms />,
+        },
       ]
     },
   ],

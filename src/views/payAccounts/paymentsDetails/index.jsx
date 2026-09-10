@@ -13,6 +13,7 @@ import _ from "lodash";
 import AsyncSelect from "../../../components/asyncSelect";
 import PayAccountStatusForm from "./PayAccountStatusForm";
 import { useState } from "react";
+import TableWalletTransaction from "./TableWalletTransaction";
 
 const STATUS = [
     {
@@ -254,6 +255,9 @@ const PaymentsDetails = () => {
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Cuentas bancarias" key="4">
                     <BankAccounts pay_account_id={pay_account_id} establishment_branch_id={establishment_branch_id} updateStatistic={updateStatistic} />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="Wallet mensajería" key="5">
+                    <TableWalletTransaction establishment_branch_id={establishment_branch_id}/>
                 </Tabs.TabPane>
             </TabsStyled>
         </Layout.Content>

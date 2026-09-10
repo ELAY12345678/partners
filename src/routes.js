@@ -58,6 +58,8 @@ const BlogsForm = React.lazy(() => import("./views/blogs/BlogsForm"));
 const PopUp = React.lazy(() => import("./views/pop-up"));
 const EstablishmentsPositionTmp =React.lazy(() => import("./views/establishments-position-tmp"));
 
+const TableCampaignMessagingPricing = React.lazy(() => import("./views/tableCampaignMessagingPricing"));
+
 const routes = [
   {
     path: "/dashboard/management/users",
@@ -364,6 +366,12 @@ const routes = [
     name: "pop-up",
     permissions: ["admin"],
     component: PopUp,
+  },
+  {
+    path: "/dashboard/management/table-campaign-messaging-pricing",
+    name: "table-campaign-messaging-pricing",
+    permissions: ["admin"],
+    component: TableCampaignMessagingPricing,
   },
 ];
 export default routes;
